@@ -11,7 +11,8 @@ CSCI 5117, Fall 2024, [assignment description](https://canvas.umn.edu/courses/46
 ### Students
 
 * Mohamed Mourad, moura028@umn.edu
-* ...
+* Nishant Menon, menon098@umn.edu
+* Yousef Barakat, barak045@umn.edu
 
 
 ## Key Features
@@ -38,13 +39,11 @@ along with a very brief caption:**
 
 ## Mock-up 
 
-There are a few tools for mock-ups. Paper prototypes (low-tech, but effective and cheap), Digital picture edition software (gimp / photoshop / etc.), or dedicated tools like moqups.com (I'm calling out moqups here in particular since it seems to strike the best balance between "easy-to-use" and "wants your money" -- the free teir isn't perfect, but it should be sufficient for our needs with a little "creative layout" to get around the page-limit)
-
-In this space please either provide images (around 4) showing your prototypes, OR, a link to an online hosted mock-up tool like moqups.com
-
 **[Add images/photos that show your paper prototype (around 4)](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository) along with a very brief caption:**
 
-![](https://media.giphy.com/media/26ufnwz3wDUli7GU0/giphy.gif)
+![Find Study Partners-1](https://github.com/user-attachments/assets/9ebeeb41-30eb-4f82-8885-cc0cadd1d06f)
+![Find Study Partners-2](https://github.com/user-attachments/assets/f28c656f-47f8-4d6e-85cf-07f0540f0c24)
+![Find Study Partners-3](https://github.com/user-attachments/assets/e6701f83-8a6e-4a84-8a16-c185ca3aa6cd)
 
 
 ## External Dependencies
