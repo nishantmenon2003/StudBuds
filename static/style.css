@@ -32,8 +32,8 @@ body, html {
 }
 
 .sidebar .logo img {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     margin-right: 10px;
     border-radius: 50%;
     border: 2px solid #fff;
@@ -57,16 +57,21 @@ body, html {
 .sidebar ul li a {
     text-decoration: none;
     color: #fff;
+    background-color: transparent;
     display: block;
     padding: 10px 15px;
     width: 100%;
     text-align: center;
     border-radius: 8px;
-    transition: background 0.3s ease;
+    transition: background-color 0.5s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .sidebar ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(255, 255, 255);
+    color: black;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-color: black;
 }
 
 /* Main content styling */
@@ -111,11 +116,6 @@ h1 {
     margin: 0 auto; /* Ensure input is centered */
 }
 
-.pure-u-1 {
-    display: flex;
-    justify-content: center; /* Horizontally center the content */
-    align-items: center; /* Vertically center the content, if needed */
-}
 
 /* Filter styling */
 .filter {
