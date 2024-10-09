@@ -1,13 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Post Study Session Listing</h1>
-<form>
-    <label>Location: <input type="text" placeholder="Ex. HSEC"></label><br>
-    <label>Class/Class Code: <input type="text" placeholder="Ex. CSCI 4131"></label><br>
-    <label>Subject: <input type="text" placeholder="Ex. Exam #2"></label><br>
-    <label>Time: <input type="text" placeholder="Ex. 6pm - 9pm"></label><br>
-    <label>Number of Students: <input type="text" placeholder="Ex. 3 students"></label><br>
-    <label>Other/Desc: <textarea placeholder="Ex. Bring your textbook."></textarea></label><br>
-    <label>Attach Picture: <input type="file"></label><br>
+<form class="pure-form pure-form-aligned">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="location">Location:</label>
+            <input id="location" type="text" placeholder="Ex. HSEC">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="class-code">Class/Class Code:</label>
+            <input id="class-code" type="text" placeholder="Ex. CSCI 4131">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="subject">Subject:</label>
+            <input id="subject" type="text" placeholder="Ex. Exam #2">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="time">Time:</label>
+            <input id="time" type="text" placeholder="Ex. 6pm - 9pm">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="num-students">Number of Students:</label>
+            <input id="num-students" type="text" placeholder="Ex. 3 students">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="description">Other/Desc:</label>
+            <textarea id="description" placeholder="Ex. Bring your textbook."></textarea>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="attach-picture">Attach Picture:</label>
+            <input id="attach-picture" type="file">
+        </div>
+
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
 </form>
 {% endblock %}
