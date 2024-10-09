@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Profile</h1>
+<div class="profile-info">
+    <img src="{{ url_for('static', filename='profile_picture.png') }}" alt="Profile Picture">
+    <form>
+        <label>Name: <input type="text" value="Jane Smith"></label><br>
+        <label>School: <input type="text" value="Univ of MN"></label><br>
+        <label>Major: <input type="text" value="Computer Science"></label><br>
+        <label>Bio: <textarea>I like cats and studying at Walter!</textarea></label><br>
+    </form>
+</div>
+<div class="extra-info">
+    <p>Some extra items and design here yet to be decided.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>FIND STUDY SESSIONS NEAR YOU...</h1>
+<div class="search-bar">
+    <input type="text" placeholder="Search for sessions...">
+    <button>🔍</button>
+</div>
+<div class="filter">
+    <label>Location: <input type="text" placeholder="50 mi"></label>
+    <label>Major Only: <input type="text" placeholder="CompSci"></label>
+</div>
+<div class="session-list">
+    <div class="session-item">
+        <img src="{{ url_for('static', filename='session_image.png') }}" alt="Session Image">
+        <p>Health Sciences | Computer Science<br>CSCI 413 | Exam #2 | 6pm - 9pm<br>Looking for 2 students...</p>
+    </div>
+</div>
+{% endblock %}
