@@ -12,6 +12,7 @@ python-dotenv = "*"
 flask-sqlalchemy = "*"
 flask-bcrypt = "*"
 flask-session = "*"
+auth0-python = "*"
 
 [dev-packages]
 

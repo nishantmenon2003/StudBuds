@@ -1,3 +1,4 @@
+/* Login page styling */
 body, html {
     margin: 0;
     padding: 0;
@@ -5,36 +6,199 @@ body, html {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
     font-family: Arial, sans-serif;
 }
 
-.login-container, .register-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-input[type="email"], input[type="password"] {
-    display: block;
+.background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    height: 100%;
+    background: linear-gradient(45deg, #4A90E2, #9013FE, #FFC312, #EE5A24);
+    background-size: 300% 300%;
+    animation: gradientAnimation 22s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Login box styling */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 1; /* Ensures that the login form is above the background */
+}
+
+.login-box {
+    background: rgba(0, 0, 0, 0.8); /* Use a semi-transparent black background for the login form */
+    color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.login-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.login-logo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+}
+
+.pure-form input[type="email"],
+.pure-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+}
+
+.pure-form input::placeholder {
+    color: #888;
+}
+
+.pure-button-primary {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #fe8513;
+    color: #fff;
+    font-size: 18px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.5s ease, color 0.3s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.pure-button-primary:hover {
+    background-color: rgb(56, 56, 255);
+    /* color: black; */
+    transform: scale(1.05);
+    border-color: black;
+}
+
+.register-link {
+    margin-top: 15px;
+}
+
+.register-link a {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.login-messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.login-messages li {
+    background: #ffb3b3;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+
+/* REGISTER PAGE
+/* Register page styling similar to the login page */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 1; /* Ensures that the register form is above the background */
+}
+
+.register-box {
+    background: rgba(0, 0, 0, 0.8); /* Use a semi-transparent background for the register form */
+    color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.register-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.register-logo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.register-box h2 {
+    margin-bottom: 20px;
+}
+
+.pure-form input[type="email"],
+.pure-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+}
+
+.pure-form input::placeholder {
+    color: #888;
+}
+
+.login-link {
+    margin-top: 15px;
+}
+
+.login-link a {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }

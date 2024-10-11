@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Login</title>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+    <div class="background-gradient">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-logo">
+                    <img src="{{ url_for('static', filename='Stud.png') }}" alt="Logo">
+                </div>
+                <h2>Login</h2>
 
-        <form action="/login" method="POST">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="/register">Register here</a></p>
+                <form action="/login" method="POST" class="pure-form pure-form-stacked login-form">
+                    <fieldset>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email" required>
+
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+
+                        <button type="submit" class="pure-button pure-button-primary">Login</button>
+                    </fieldset>
+                </form>
+                <p class="register-link">Don't have an account? <a href="/register">Register here</a></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>
