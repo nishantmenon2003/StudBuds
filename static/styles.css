@@ -62,8 +62,8 @@ body, html {
 }
 
 .login-logo img {
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     border: 2px solid #fff;
 }
@@ -155,19 +155,6 @@ body, html {
     text-align: center;
     max-width: 400px;
     width: 90%;
-}
-
-.register-logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.register-logo img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #fff;
 }
 
 .register-box h2 {

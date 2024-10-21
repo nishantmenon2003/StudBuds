@@ -55,7 +55,7 @@ def auth0_login():
 def profile():
     if 'user' not in session:
         flash('Please log in to access this page.', 'warning')
-        return redirect(url_for('auth0_login'))
+        return redirect(url_for('login'))
 
     return render_template('profile.html')  # Ensure you create a profile.html template.
 
@@ -152,19 +152,22 @@ def logout():
 
 @app.route('/find_study_sessions')
 def find_study_sessions():
-    if 'user' not in session:
-        flash('Please log in to access this page.', 'warning')
-        return redirect(url_for('auth0_login'))
+    is_logged_in = 'user' in session
+    # Pass the login status to the template
+    return render_template('find_study_sessions.html', is_logged_in=is_logged_in)
 
-    return render_template('find_study_sessions.html') 
-
-@app.route('/post_study_sessions')
+@app.route('/post_study_sessions', methods=['GET', 'POST'])
 def post_study_sessions():
     if 'user' not in session:
-        flash('Please log in to access this page.', 'warning')
-        return redirect(url_for('auth0_login'))
+        flash('You need to have an account to post or view Profile.', 'warning')
+        return redirect(url_for('login'))
 
-    return render_template('post_study_sessions.html') 
+    if request.method == 'POST':
+        # Handle posting study sessions for logged-in users
+        flash('Study session posted successfully!', 'success')
+        return redirect(url_for('find_study_sessions'))
+
+    return render_template('post_study_sessions.html')
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
