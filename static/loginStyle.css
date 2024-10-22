@@ -108,6 +108,17 @@ body, html {
     border-color: black;
 }
 
+.pure-button-primary:hover {
+    background-color: rgb(56, 56, 255);
+    /* color: black; */
+    transform: scale(1.05);
+    border-color: black;
+}
+
+.pure-button-primary:active {
+    transform: translateY(4px);
+}
+
 .register-link {
     margin-top: 15px;
 }

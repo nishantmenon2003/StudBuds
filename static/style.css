@@ -73,6 +73,10 @@ body, html {
     border-color: black;
 }
 
+.sidebar ul li a:active {
+    transform: translateY(4px); /* Make it move down slightly when clicked */
+}
+
 /* Main content styling */
 .main-content {
     margin-left: 260px;
