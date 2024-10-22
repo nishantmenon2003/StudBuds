@@ -8,6 +8,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
+from flask_migrate import Migrate
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -26,17 +27,44 @@ Session(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
+migrate = Migrate(app, db)
+
 # User model for storing user information in the database
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    school = db.Column(db.String(100), nullable=True)
+    major = db.Column(db.String(100), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+
+
+
+
+class StudySession(db.Model):
+    __tablename__ = 'study_session'
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(100), nullable=False)
+    class_code = db.Column(db.String(50), nullable=False)
+    subject = db.Column(db.String(100), nullable=False)
+    time = db.Column(db.String(50), nullable=False)
+    num_students = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    picture = db.Column(db.String(200), nullable=True)  # Save the file path for the uploaded picture
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Link to the user who posted
+
+
+
 
 # Home route - displays the login and registration forms
 @app.route('/')
 def home():
-    return redirect(url_for('find_study_sessions'))
+    if 'user' not in session:  # Check if user is not in the session
+        return redirect(url_for('login'))  # Redirect to the login page
+    
+    return redirect(url_for('login'))  # Redirect to find study sessions if logged in
+
 
 # Auth0 Login route - redirects to Auth0 login page
 @app.route('/auth0-login')
@@ -51,14 +79,28 @@ def auth0_login():
     }
     return redirect(f"{auth0_url}?{urlencode(params)}")
 
+@app.route('/view_listing/<int:listing_id>')
+def view_listing(listing_id):
+    # Fetch the listing from the database using the listing_id
+    listing = StudySession.query.get_or_404(listing_id)
+    
+    # Render a template to view the listing
+    return render_template('view_listing.html', listing=listing)
+
+
 @app.route('/profile')
 def profile():
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    # user_listings = Listing.query.filter_by(user_id=session['user']['id']).all()
-    user_listings = ""
-    return render_template('profile.html', listings=user_listings)
+    # Query user listings and user info from the session
+    user = session['user']
+    user_listings = StudySession.query.filter_by(user_id=user['id']).all()
+
+    return render_template('profile.html', user=user, listings=user_listings)
+
+
+
 
 # Auth0 Callback route - handles the response from Auth0
 @app.route('/callback')
@@ -76,11 +118,19 @@ def callback_handling():
 
     # Exchange authorization code for access token
     response = requests.post(url, json=payload, headers=headers)
+    if response.status_code != 200:
+        flash("Failed to log in with Auth0.", "danger")
+        return redirect(url_for('login'))
+
     tokens = response.json()
 
     # Get user info from Auth0
     user_url = f"https://{os.getenv('AUTH0_DOMAIN')}/userinfo"
     user_response = requests.get(user_url, headers={'Authorization': f"Bearer {tokens['access_token']}"})
+    if user_response.status_code != 200:
+        flash("Failed to get user info from Auth0.", "danger")
+        return redirect(url_for('login'))
+
     user_info = user_response.json()
 
     # Store user info in session
@@ -137,12 +187,14 @@ def login():
                 'email': user.email
             }
             flash('Login successful!', 'success')
-            return redirect(url_for('find_study_sessions'))  # Corrected this line
+            return redirect(url_for('profile'))
 
         else:
             flash('Invalid email or password. Please try again.', 'danger')
 
     return render_template('login.html')
+
+
 
 # Logout route - logs the user out and redirects to the home page
 @app.route('/logout')
@@ -151,12 +203,18 @@ def logout():
     return redirect(url_for('home'))
 
 
+# Modify /find_study_sessions to pass sessions to the template
 @app.route('/find_study_sessions')
 def find_study_sessions():
+    if 'user' not in session:
+        flash('Please log in to access this page.', 'warning')
+        return redirect(url_for('login'))  # Redirect to login if not authenticated
+    
     is_logged_in = 'user' in session
-    # Pass the login status to the template
-    return render_template('find_study_sessions.html', is_logged_in=is_logged_in)
+    study_sessions = StudySession.query.all()  # Fetch all study sessions
+    return render_template('find_study_sessions.html', is_logged_in=is_logged_in, study_sessions=study_sessions)
 
+# Modify /post_study_sessions to handle file upload and database insertions
 @app.route('/post_study_sessions', methods=['GET', 'POST'])
 def post_study_sessions():
     if 'user' not in session:
@@ -164,11 +222,43 @@ def post_study_sessions():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        # Handle posting study sessions for logged-in users
+        print("Form submitted")  # Check if this gets printed
+        location = request.form['location']
+        class_code = request.form['class-code']
+        subject = request.form['subject']
+        time = request.form['time']
+        num_students = request.form['num-students']
+        description = request.form['description']
+        picture = request.files['attach-picture']
+        
+        # Handle file upload (save it to a directory and store the file path in the database)
+        picture_path = None
+        if picture:
+            picture_path = os.path.join('static/uploads', picture.filename)
+            picture.save(picture_path)
+
+        # Create a new study session
+        new_session = StudySession(
+            location=location,
+            class_code=class_code,
+            subject=subject,
+            time=time,
+            num_students=num_students,
+            description=description,
+            picture=picture_path,
+            user_id=session['user']['id']
+        )
+
+        # Add to the database
+        db.session.add(new_session)
+        db.session.commit()
+
         flash('Study session posted successfully!', 'success')
         return redirect(url_for('find_study_sessions'))
 
     return render_template('post_study_sessions.html')
+
+
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)

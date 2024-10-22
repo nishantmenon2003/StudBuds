@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Post Study Session Listing</h1>
-<form class="pure-form pure-form-aligned">
+<form action="{{ url_for('post_study_sessions') }}" method="POST" enctype="multipart/form-data" class="pure-form pure-form-aligned">
     <fieldset>
         <div class="pure-control-group">
             <label for="location">Location:</label>
-            <input id="location" type="text" placeholder="Ex. HSEC">
+            <input id="location" name="location" type="text" placeholder="Ex. HSEC">
         </div>
 
         <div class="pure-control-group">
             <label for="class-code">Class/Class Code:</label>
-            <input id="class-code" type="text" placeholder="Ex. CSCI 4131">
+            <input id="class-code" name="class-code" type="text" placeholder="Ex. CSCI 4131">
         </div>
 
         <div class="pure-control-group">
             <label for="subject">Subject:</label>
-            <input id="subject" type="text" placeholder="Ex. Exam #2">
+            <input id="subject" name="subject" type="text" placeholder="Ex. Exam #2">
         </div>
 
         <div class="pure-control-group">
             <label for="time">Time:</label>
-            <input id="time" type="text" placeholder="Ex. 6pm - 9pm">
+            <input id="time" name="time" type="text" placeholder="Ex. 6pm - 9pm">
         </div>
 
         <div class="pure-control-group">
             <label for="num-students">Number of Students:</label>
-            <input id="num-students" type="text" placeholder="Ex. 3 students">
+            <input id="num-students" name="num-students" type="text" placeholder="Ex. 3 students">
         </div>
 
         <div class="pure-control-group">
             <label for="description">Other/Desc:</label>
-            <textarea id="description" placeholder="Ex. Bring your textbook."></textarea>
+            <textarea id="description" name="description" placeholder="Ex. Bring your textbook."></textarea>
         </div>
 
         <div class="pure-control-group">
             <label for="attach-picture">Attach Picture:</label>
-            <input id="attach-picture" type="file">
+            <input id="attach-picture" name="attach-picture" type="file">
         </div>
 
         <div class="pure-controls">
@@ -43,4 +43,5 @@
         </div>
     </fieldset>
 </form>
+
 {% endblock %}

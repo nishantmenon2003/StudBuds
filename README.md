@@ -6,7 +6,7 @@ CSCI 5117, Fall 2024, [assignment description](https://canvas.umn.edu/courses/46
 
 * Team Name: Wallahi Wonders
 * App Name: StudBuds
-* App Link: <https://TODO.com/>
+* App Link: <https://project-1-wallahi-wonders.onrender.com>
 
 ### Students
 
