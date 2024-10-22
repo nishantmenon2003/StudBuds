@@ -227,6 +227,5 @@ def post_study_sessions():
 
     return render_template('post_study_sessions.html')
 
-# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
