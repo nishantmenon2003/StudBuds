@@ -15,12 +15,16 @@
 
         <nav>
             <ul>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% if 'user' not in session %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('profile') }}">Profile</a></li>
                 <li><a href="{{ url_for('find_study_sessions') }}">Find Study Sessions</a></li>
                 <li><a href="{{ url_for('post_study_sessions') }}">Post Study Sessions</a></li>
+                {% if 'user' in session %}
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% endif %}
             </ul>
         </nav>
     </div>

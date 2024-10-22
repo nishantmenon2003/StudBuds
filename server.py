@@ -36,7 +36,7 @@ class User(db.Model):
 # Home route - displays the login and registration forms
 @app.route('/')
 def home():
-    return render_template('login.html')
+    return redirect(url_for('find_study_sessions'))
 
 # Auth0 Login route - redirects to Auth0 login page
 @app.route('/auth0-login')
