@@ -3,35 +3,51 @@
 <h1>Profile</h1>
 <div class="profile-container pure-g">
     <div class="pure-u-1 profile-picture-container">
-        <img src="{{ url_for('static', filename='pfp.jpg') }}" alt="Profile Picture" class="pure-img profile-picture">
+        <div class="pure-u-1 profile-picture-container">
+            <!-- Check if the user has a profile picture -->
+            {% if user.profile_picture %}
+                <!-- If a profile picture exists, display it -->
+                <img src="data:image/jpeg;base64,{{ user.profile_picture | b64encode }}" alt="Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
+            {% else %}
+                <!-- If no profile picture, show a default placeholder -->
+                <img src="{{ url_for('static', filename='default_profile_picture.jpg') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
+            {% endif %}
+        </div>
     </div>
     <div class="pure-u-1 profile-form-container">
-        <form class="pure-form pure-form-stacked">
+        <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('profile') }}">
+            <div class="pure-control-group">
+                <label for="profile-picture">Profile Picture:</label>
+                <input type="file" id="profile-picture" name="profile-picture">
+            </div>
             <fieldset>
                 <div class="pure-control-group">
                     <label for="name">Name:</label>
-                    <input id="name" type="text" value="{{ user['name'] }}">
+                    <input id="name" name="name" type="text" value="{{ user.name }}">
                 </div>
-
+        
                 <div class="pure-control-group">
                     <label for="email">Email:</label>
-                    <input id="email" type="text" value="{{ user['email'] }}">
+                    <input id="email" name="email" type="text" value="{{ user.email }}">
                 </div>
-
+        
                 <div class="pure-control-group">
                     <label for="school">School:</label>
-                    <input id="school" type="text" value="Univ of MN">
+                    <input id="school" name="school" type="text" value="{{ user.school }}">
                 </div>
-
+        
                 <div class="pure-control-group">
                     <label for="major">Major:</label>
-                    <input id="major" type="text" value="Computer Science">
+                    <input id="major" name="major" type="text" value="{{ user.major }}">
                 </div>
-
+        
                 <div class="pure-control-group">
                     <label for="bio">Bio:</label>
-                    <textarea id="bio">I like cats and studying at Walter!</textarea>
+                    <textarea id="bio" name="bio">{{ user.bio }}</textarea>
                 </div>
+        
+                <!-- Add submit button -->
+                <button type="submit" class="pure-button pure-button-primary">Update Profile</button>
             </fieldset>
         </form>
     </div>

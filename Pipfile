@@ -13,6 +13,7 @@ flask-sqlalchemy = "*"
 flask-bcrypt = "*"
 flask-session = "*"
 auth0-python = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

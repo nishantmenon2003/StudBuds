@@ -33,11 +33,14 @@ migrate = Migrate(app, db)
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     school = db.Column(db.String(100), nullable=True)
     major = db.Column(db.String(100), nullable=True)
     bio = db.Column(db.Text, nullable=True)
+    
+
 
 class StudySession(db.Model):
     __tablename__ = 'study_session'
@@ -76,13 +79,31 @@ def view_listing(listing_id):
     listing = StudySession.query.get_or_404(listing_id)
     return render_template('view_listing.html', listing=listing)
 
-@app.route('/profile')
+
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    user = session['user']
-    user_listings = StudySession.query.filter_by(user_id=user['id']).all()
+    user = User.query.filter_by(id=session['user']['id']).first()
+
+    if request.method == 'POST':
+        # Get data from the form and update the user's profile
+        user.name = request.form['name']
+        user.email = request.form['email']
+        user.school = request.form['school']
+        user.major = request.form['major']
+        user.bio = request.form['bio']
+        
+        # Commit changes to the database
+        db.session.commit()
+        session['user']['email'] = user.email
+        session['user']['name'] = user.name
+        flash('Profile updated successfully.', 'success')
+
+    # Fetch user's listings
+    user_listings = StudySession.query.filter_by(user_id=user.id).all()
+
     return render_template('profile.html', user=user, listings=user_listings)
 
 # Auth0 Callback route - handles the response from Auth0
