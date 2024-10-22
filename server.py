@@ -54,10 +54,11 @@ def auth0_login():
 @app.route('/profile')
 def profile():
     if 'user' not in session:
-        flash('Please log in to access this page.', 'warning')
         return redirect(url_for('login'))
 
-    return render_template('profile.html')  # Ensure you create a profile.html template.
+    # user_listings = Listing.query.filter_by(user_id=session['user']['id']).all()
+    user_listings = ""
+    return render_template('profile.html', listings=user_listings)
 
 # Auth0 Callback route - handles the response from Auth0
 @app.route('/callback')

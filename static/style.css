@@ -305,3 +305,69 @@ form button {
 form button:hover {
     background-color: #357ABD;
 }
+
+/* Style for the entire table */
+table.pure-table {
+    width: 100%;  /* Make the table take up full width */
+    border-collapse: collapse;  /* Remove space between cells */
+    margin-top: 20px;  /* Add space above the table */
+}
+
+/* Table headers */
+table.pure-table th {
+    background-color: #f2f2f2;  /* Light background color for headers */
+    font-weight: bold;
+    padding: 10px;  /* Add some padding for readability */
+    text-align: left;  /* Align text to the left */
+    font-size: 1.1em;
+    border-bottom: 2px solid #ddd;  /* Add border to separate headers */
+}
+
+/* Table rows */
+table.pure-table td {
+    padding: 12px;  /* Increase padding for better readability */
+    border-bottom: 1px solid #ddd;  /* Add border between rows */
+    font-size: 1em;
+}
+
+/* Icons in action columns */
+.actions a {
+    margin: 0 10px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.actions a:hover {
+    color: #000;
+}
+
+/* Ensure rows fill the table's width */
+table.pure-table tr {
+    display: table-row;
+    width: 100%;
+}
+
+/* Styling for hover effects on rows */
+table.pure-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Adjusting table columns to fit more comfortably */
+table.pure-table td:first-child {
+    width: 25%;  /* Make location column wider */
+}
+
+table.pure-table td:nth-child(2),
+table.pure-table td:nth-child(3) {
+    width: 20%;  /* Make course and event columns a bit narrower */
+}
+
+table.pure-table td:nth-child(4),
+table.pure-table td:nth-child(5) {
+    width: 15%;  /* Adjust time and students columns */
+}
+
+table.pure-table td:last-child {
+    text-align: center;
+    width: 10%;  /* Set width for actions column */
+}
