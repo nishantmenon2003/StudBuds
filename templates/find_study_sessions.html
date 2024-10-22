@@ -24,10 +24,10 @@
     {% if study_sessions %}
         {% for session in study_sessions %}
             <div class="pure-u-1 pure-u-md-1-2 session-item">
-                {% if session.picture %}
-                    <img src="{{ url_for('static', filename=session.picture) }}" alt="Session Image" class="pure-img">
+                {% if session.listing_picture %}
+                <img src="data:image/jpeg;base64,{{ session.listing_picture | b64encode }}" alt="Study Session Picture" />
                 {% else %}
-                    <img src="{{ url_for('static', filename='default-image.jpg') }}" alt="Default Session Image" class="pure-img">
+                    <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="pure-img">
                 {% endif %}
                 <p>{{ session.location }} | {{ session.class_code }}<br>
                    {{ session.subject }} | {{ session.time }}<br>

@@ -10,15 +10,18 @@
                 <img src="data:image/jpeg;base64,{{ user.profile_picture | b64encode }}" alt="Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
             {% else %}
                 <!-- If no profile picture, show a default placeholder -->
-                <img src="{{ url_for('static', filename='default_profile_picture.jpg') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
+                <img src="{{ url_for('static', filename='guest.png') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
             {% endif %}
         </div>
     </div>
     <div class="pure-u-1 profile-form-container">
-        <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('profile') }}">
+        <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
             <div class="pure-control-group">
                 <label for="profile-picture">Profile Picture:</label>
-                <input type="file" id="profile-picture" name="profile-picture">
+                <input type="file" id="profile-picture" name="profile_picture">
+                <text for="profile-picture">Note: Press 'Update Profile' to update profile picture after uploading and give it a second.</text>
+            </br>
+            </br>
             </div>
             <fieldset>
                 <div class="pure-control-group">
@@ -45,9 +48,9 @@
                     <label for="bio">Bio:</label>
                     <textarea id="bio" name="bio">{{ user.bio }}</textarea>
                 </div>
-        
+                </br>
                 <!-- Add submit button -->
-                <button type="submit" class="pure-button pure-button-primary">Update Profile</button>
+                <button type="submit" class="pure-button pure-button-update">Update Profile</button>
             </fieldset>
         </form>
     </div>

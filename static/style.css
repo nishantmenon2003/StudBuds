@@ -79,7 +79,6 @@ body, html {
     padding: 30px;
     background-color: #ffffff;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -116,7 +115,7 @@ h1 {
 }
 
 .search-bar .pure-button-primary {
-    background-color: #4CAF50;
+    background: linear-gradient(135deg, #dccf19, #fe6913);
     border: none;
     color: white;
     padding: 10px 20px;
@@ -125,11 +124,11 @@ h1 {
     cursor: pointer;
     border-radius: 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .search-bar .pure-button-primary:hover {
-    background-color: #45a049;
+    background: linear-gradient(135deg, #4A90E2, #9013FE);
     transform: scale(1.05);
 }
 
@@ -185,6 +184,8 @@ h1 {
     height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
+    height: 140px;
+    object-fit: cover; 
 }
 
 .session-item p {
@@ -194,77 +195,7 @@ h1 {
     line-height: 1.5;
 }
 
-/* Profile page styling */
-.profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
 
-.profile-picture-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.profile-picture {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #4A90E2;
-    object-fit: cover;
-    margin: 0 auto;
-}
-
-.profile-form-container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.profile-info label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 5px;
-    color: #333;
-}
-
-.profile-info input[type="text"],
-.profile-info textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease;
-}
-
-.profile-info input[type="text"]:focus,
-.profile-info textarea:focus {
-    border-color: #4A90E2;
-    outline: none;
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
-}
-
-.profile-info textarea {
-    resize: vertical;
-    height: 100px;
-}
-
-.extra-info {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border: 1px dashed #ddd;
-    border-radius: 10px;
-    text-align: center;
-    color: #666;
-    margin-top: 20px;
-}
 
 /* Post study session page styling */
 form {
@@ -275,7 +206,6 @@ form {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 form label {
@@ -311,18 +241,4 @@ form input[type="file"]:focus {
 form textarea {
     resize: vertical;
     height: 80px;
-}
-
-form button {
-    padding: 12px 20px;
-    background-color: #4A90E2;
-    border: none;
-    color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-form button:hover {
-    background-color: #357ABD;
 }

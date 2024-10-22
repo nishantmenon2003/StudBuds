@@ -9,6 +9,7 @@ import json
 import requests
 from dotenv import load_dotenv
 from flask_migrate import Migrate
+import base64
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -39,6 +40,7 @@ class User(db.Model):
     school = db.Column(db.String(100), nullable=True)
     major = db.Column(db.String(100), nullable=True)
     bio = db.Column(db.Text, nullable=True)
+    profile_picture = db.Column(db.LargeBinary, nullable=True)
     
 
 
@@ -51,8 +53,14 @@ class StudySession(db.Model):
     time = db.Column(db.String(50), nullable=False)
     num_students = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    picture = db.Column(db.String(200), nullable=True)  # Save the file path for the uploaded picture
+    listing_picture = db.Column(db.LargeBinary, nullable=True)  # Save the file path for the uploaded picture
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Link to the user who posted
+
+@app.template_filter('b64encode')
+def b64encode_filter(data):
+    if data is None:
+        return ''
+    return base64.b64encode(data).decode('utf-8')
 
 # Home route - displays the login and registration forms
 @app.route('/')
@@ -94,8 +102,12 @@ def profile():
         user.school = request.form['school']
         user.major = request.form['major']
         user.bio = request.form['bio']
-        
-        # Commit changes to the database
+        # Handle profile picture upload
+        if 'profile_picture' in request.files:
+            picture = request.files['profile_picture']
+            if picture:
+                user.profile_picture = picture.read()
+
         db.session.commit()
         session['user']['email'] = user.email
         session['user']['name'] = user.name
@@ -222,12 +234,13 @@ def post_study_sessions():
         time = request.form['time']
         num_students = request.form['num-students']
         description = request.form['description']
-        picture = request.files['attach-picture']
 
-        picture_path = None
-        if picture:
-            picture_path = os.path.join('static/uploads', picture.filename)
-            picture.save(picture_path)
+        listing_picture = None
+        if 'listing_picture' in request.files:
+            picture = request.files['listing_picture']
+            if picture:
+                listing_picture = picture.read()
+
 
         new_session = StudySession(
             location=location,
@@ -236,7 +249,7 @@ def post_study_sessions():
             time=time,
             num_students=num_students,
             description=description,
-            picture=picture_path,
+            listing_picture=listing_picture,
             user_id=session['user']['id']
         )
 

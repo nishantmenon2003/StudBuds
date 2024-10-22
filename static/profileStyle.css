@@ -1,0 +1,156 @@
+/* Table styling */
+.pure-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.pure-table th,
+.pure-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pure-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.pure-table tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+/* Animation for smooth appearance */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-container,
+.pure-table {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Profile Picture Container */
+.profile-picture-container {
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    align-items: center;     /* Center the image vertically */
+    margin-bottom: 20px;
+    width: 100%; /* Ensure full width to center the content */
+}
+
+/* Profile Picture */
+.profile-picture {
+    width: 200px;
+    height: 200px; /* Ensure height and width are the same for a circle */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensures the image scales to cover the entire container without distortion */
+    border: 5px solid #ffffff; /* Optional: add a white border */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-picture:hover {
+    transform: scale(1.1); /* Add hover effect for scaling */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Container */
+.profile-form-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+
+
+.profile-container .profile-picture-container img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-left: 140px;
+}
+
+.profile-picture-container img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-form-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    text-align: center; /* Ensures form is centered */
+}
+
+
+/* Update Button */
+/* Update Profile button styled like sidebar buttons */
+button.pure-button-update {
+    background: linear-gradient(90deg, #4A90E2, #9013FE);
+    color: #fff;
+    padding: 10px 15px;
+    width: 95%;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.5s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    cursor: pointer; /* Add cursor pointer to make it clear it's clickable */
+}
+
+button.pure-button-update:hover {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-color: black;
+}
+
+button.pure-button-update:active {
+    transform: translateY(4px); /* Make it move down slightly when clicked */
+}
