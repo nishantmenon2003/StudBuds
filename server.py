@@ -2,8 +2,11 @@ from flask import Flask, redirect, url_for, session, render_template, request, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_session import Session
-from auth0.authentication import GetToken, Users  # Update this line
+from flask import has_request_context
+from auth0.authentication import GetToken, Users
+from datetime import timedelta
 from urllib.parse import urlencode
+from math import radians, sin, cos, sqrt, atan2
 import os
 import json
 import requests
@@ -26,6 +29,9 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 Session(app)
 
 # Initialize the database and Bcrypt
@@ -54,13 +60,15 @@ attendees_table = db.Table('attendees',
 class StudySession(db.Model):
     __tablename__ = 'study_session'
     id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
     class_code = db.Column(db.String(50), nullable=False)
     subject = db.Column(db.String(100), nullable=False)
     time = db.Column(db.String(50), nullable=False)
     num_students = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
     listing_picture = db.Column(db.LargeBinary, nullable=True)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     attendees = db.relationship('User', secondary=attendees_table, backref='sessions', cascade='all, delete')
 
@@ -225,15 +233,47 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # Haversine formula to calculate the distance between two lat/lon points
+    R = 6371.0  # Radius of Earth in kilometers
+
+    lat1_rad = radians(lat1)
+    lon1_rad = radians(lon1)
+    lat2_rad = radians(lat2)
+    lon2_rad = radians(lon2)
+
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+
+    a = sin(dlat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    distance = R * c  # Distance in kilometers
+    return distance
+
 # Route to find study sessions with search functionality
 @app.route('/find_study_sessions', methods=['GET'])
 def find_study_sessions():
     query = request.args.get('query', '')
-    user = None
-    if 'user' in session:
-        user = User.query.filter_by(id=session['user']['id']).first()
+    radius = request.args.get('radius', '50')  # Default radius to 50 if not provided
+    user_lat = request.args.get('user_lat', None)
+    user_lon = request.args.get('user_lon', None)
 
-    # Assuming you are querying the database for study sessions
+    user = None
+
+    try:
+        if 'user' in session:
+            user = User.query.filter_by(id=session['user']['id']).first()
+    except Exception as e:
+        print(f"Error accessing session: {e}")
+    
+    # Validate and convert radius to float
+    try:
+        radius_km = float(radius) * 1.60934  # Convert miles to kilometers
+    except ValueError:
+        radius_km = 50 * 1.60934  # If conversion fails, default to 50 miles in km
+
+    # Fetch all study sessions or filter by query
     if query:
         study_sessions = StudySession.query.filter(
             StudySession.class_code.contains(query) | 
@@ -242,7 +282,41 @@ def find_study_sessions():
     else:
         study_sessions = StudySession.query.all()
 
-    return render_template('find_study_sessions.html', study_sessions=study_sessions, user=user, query=query)
+    filtered_sessions = []
+    if user_lat and user_lon:
+        try:
+            user_lat = float(user_lat)
+            user_lon = float(user_lon)
+        except ValueError:
+            user_lat = None
+            user_lon = None
+
+        if user_lat is not None and user_lon is not None:
+            for session in study_sessions:
+                session_lat = session.latitude
+                session_lon = session.longitude
+
+                # Check if session latitude and longitude are valid numbers
+                if session_lat is not None and session_lon is not None:
+                    # Calculate the distance between the user and the session
+                    distance = calculate_distance(user_lat, user_lon, session_lat, session_lon)
+
+                    # If the session is within the specified radius, include it in the filtered list
+                    if distance <= radius_km:
+                        filtered_sessions.append(session)
+    else:
+        # If no user location is provided, show all sessions
+        filtered_sessions = study_sessions
+
+    # Pass the filtered study sessions and user to the template
+    return render_template('find_study_sessions.html', study_sessions=filtered_sessions, user=user, query=query)
+
+
+
+
+
+
+
 
 # Modify /post_study_sessions to handle file upload and database insertions
 @app.route('/post_study_sessions', methods=['GET', 'POST'])
@@ -258,13 +332,16 @@ def post_study_sessions():
         time = request.form['time']
         num_students = request.form['num-students']
         description = request.form['description']
+        
+        # Get the latitude and longitude from the form
+        latitude = request.form['latitude']
+        longitude = request.form['longitude']
 
         listing_picture = None
         if 'listing_picture' in request.files:
             picture = request.files['listing_picture']
             if picture:
                 listing_picture = picture.read()
-
 
         new_session = StudySession(
             location=location,
@@ -274,6 +351,8 @@ def post_study_sessions():
             num_students=num_students,
             description=description,
             listing_picture=listing_picture,
+            latitude=latitude,
+            longitude=longitude,  # Make sure these values are passed
             user_id=session['user']['id']
         )
 
@@ -284,6 +363,8 @@ def post_study_sessions():
         return redirect(url_for('find_study_sessions'))
 
     return render_template('post_study_sessions.html')
+
+
 
 @app.route('/view_listing/<int:listing_id>', methods=['GET', 'POST'])
 def view_listing(listing_id):
@@ -312,5 +393,34 @@ def view_listing(listing_id):
     already_rsvpd = user in session_item.attendees if user else False
 
     return render_template('view_listing.html', session_item=session_item, already_rsvpd=already_rsvpd)
+
+@app.route('/edit_listing/<int:listing_id>', methods=['GET', 'POST'])
+def edit_listing(listing_id):
+    listing = StudySession.query.get_or_404(listing_id)
+
+    if 'user' not in session or listing.user_id != session['user']['id']:
+        flash("You don't have permission to edit this listing.", "danger")
+        return redirect(url_for('profile'))
+
+    if request.method == 'POST':
+        # Update the listing with form data
+        listing.location = request.form['location']
+        listing.class_code = request.form['class_code']
+        listing.subject = request.form['subject']
+        listing.time = request.form['time']
+        listing.num_students = request.form['num_students']
+        listing.description = request.form['description']
+
+        try:
+            db.session.commit()
+            flash('Listing updated successfully!', 'success')
+            return redirect(url_for('profile'))
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            flash('An error occurred while updating the listing.', 'danger')
+            return redirect(url_for('edit_listing', listing_id=listing.id))
+
+    return render_template('edit_listing.html', listing=listing)
+
 if __name__ == '__main__':
     app.run(debug=True)

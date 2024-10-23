@@ -159,6 +159,24 @@ button.pure-button-update:active {
     text-align: left; /* Keep text aligned to the left inside the input */
 }
 
+.edit-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.edit-button:hover {
+    background-color: #45a049;
+}
+
 /* Align the Submit Button */
 .pure-button {
     margin-top: 20px;

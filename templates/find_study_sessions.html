@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <div class="page-content">
     <h1>StudBuds Study Sessions</h1>
 
@@ -7,15 +8,23 @@
         <div class="pure-u-1 search-bar">
             <form class="pure-form" method="GET" action="{{ url_for('find_study_sessions') }}">
                 <input type="text" name="query" placeholder="Search for sessions..." class="pure-input-rounded" value="{{ query }}">
+                <label for="radius">Radius (miles):</label>
+                <input id="radiusInput" type="number" name="radius" placeholder="50 mi" class="pure-input-rounded" value="{{ radius }}">
+                
+                <!-- Hidden fields to capture user's latitude and longitude -->
+                <input type="hidden" id="user_lat" name="user_lat">
+                <input type="hidden" id="user_lon" name="user_lon">
+
                 <button type="submit" class="pure-button pure-button-primary">🔍 Search</button>
             </form>
         </div>
     </div>
 
+    <!-- Map container -->
+    <div id="map" style="height: 400px; margin-top: 20px;"></div>
+
+    <!-- Filter options -->
     <div class="pure-g filter">
-        <div class="pure-u-1 pure-u-md-1-2">
-            <label>Location: <input type="text" placeholder="50 mi" class="pure-input-1"></label>
-        </div>
         <div class="pure-u-1 pure-u-md-1-2">
             <label>Major Only: <input type="text" placeholder="CompSci" class="pure-input-1"></label>
         </div>
@@ -36,8 +45,6 @@
                         Looking for {{ session.num_students }} students...</p>
                     </a>
                     
-                    
-                    <!-- Show RSVP indication if the user has already RSVP'd -->
                     {% if user and user in session.attendees %}
                         <span class="rsvp-checkmark">✔ RSVP'd</span>
                     {% endif %}
@@ -48,5 +55,36 @@
         {% endif %}
     </div>
 </div>
-{% endblock %}
 
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Set the hidden form fields with the user's latitude and longitude
+            document.getElementById("user_lat").value = latitude;
+            document.getElementById("user_lon").value = longitude;
+
+            // Initialize the map
+            var map = L.map('map').setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var marker = L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('You are here!')
+                .openPopup();
+        }, function(error) {
+            console.error("Error fetching geolocation: ", error);
+        });
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+});
+
+</script>
+{% endblock %}

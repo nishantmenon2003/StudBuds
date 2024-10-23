@@ -4,9 +4,15 @@
     <h1>Post Study Session Listing</h1>
     <form action="{{ url_for('post_study_sessions') }}" method="POST" enctype="multipart/form-data" class="pure-form pure-form-aligned">
         <fieldset>
+            <!-- Location input with autocomplete -->
             <div class="pure-control-group">
                 <label for="location">Location:</label>
-                <input id="location" name="location" type="text" placeholder="Ex. HSEC" required>
+                <input id="location" name="location" type="text" placeholder="Type to search..." autocomplete="off" required>
+                <!-- Hidden fields for latitude and longitude -->
+                <input type="hidden" id="latitude" name="latitude" required>
+                <input type="hidden" id="longitude" name="longitude" required>
+                <!-- Dropdown for location suggestions -->
+                <ul id="locationSuggestions" class="autocomplete-dropdown"></ul>
             </div>
 
             <div class="pure-control-group">
@@ -45,4 +51,74 @@
         </fieldset>
     </form>
 </div>
+
+<!-- Styles for the dropdown -->
+<style>
+    .autocomplete-dropdown {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .autocomplete-dropdown li {
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    .autocomplete-dropdown li:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<!-- Add JavaScript for location autocomplete -->
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+    const locationInput = document.getElementById('location');
+    const suggestionsContainer = document.getElementById('locationSuggestions');
+    
+    locationInput.addEventListener('input', function() {
+        const query = locationInput.value;
+
+        if (query.length > 2) {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear previous suggestions
+                    suggestionsContainer.innerHTML = '';
+
+                    // Add new suggestions
+                    data.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item.display_name;
+                        li.dataset.lat = item.lat;
+                        li.dataset.lon = item.lon;
+
+                        // Get only the name of the location (e.g., first part of the display name)
+                        const locationName = item.display_name.split(",")[0]; // Splits by comma and gets the first part
+
+                        // When a suggestion is clicked, update the input and hidden fields
+                        li.addEventListener('click', function() {
+                            locationInput.value = locationName;  // Store only the name for readability
+                            document.getElementById('latitude').value = item.lat;
+                            document.getElementById('longitude').value = item.lon;
+
+                            // Clear suggestions after selection
+                            suggestionsContainer.innerHTML = '';
+                        });
+
+                        suggestionsContainer.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching location data:', error));
+        }
+    });
+});
+</script>
 {% endblock %}

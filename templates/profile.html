@@ -6,12 +6,9 @@
     <div class="profile-container pure-g">
         <div class="pure-u-1 profile-picture-container">
             <div class="pure-u-1 profile-picture-container">
-                <!-- Check if the user has a profile picture -->
                 {% if user.profile_picture %}
-                    <!-- If a profile picture exists, display it -->
                     <img src="data:image/jpeg;base64,{{ user.profile_picture | b64encode }}" alt="Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
                 {% else %}
-                    <!-- If no profile picture, show a default placeholder -->
                     <img src="{{ url_for('static', filename='guest.png') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
                 {% endif %}
             </div>
@@ -51,7 +48,6 @@
                         <textarea id="bio" name="bio">{{ user.bio }}</textarea>
                     </div>
                     </br>
-                    <!-- Add submit button -->
                     <button type="submit" class="pure-button pure-button-update">Update Profile</button>
                 </fieldset>
             </form>
@@ -69,7 +65,7 @@
                     <th>Event</th>
                     <th>Time</th>
                     <th>Students</th>
-                    <th>Actions</th> <!-- New Actions column for delete -->
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,11 +77,16 @@
                     <td>{{ listing.time }}</td>
                     <td>{{ listing.num_students }}</td>
                     <td>
+                        <!-- View Button -->
+                        <a href="{{ url_for('view_listing', listing_id=listing.id) }}" class="pure-button view-button">View</a>
+                        
+                        <!-- Edit Button -->
+                        <a href="{{ url_for('edit_listing', listing_id=listing.id) }}" class="pure-button edit-button">Edit</a>
+                        
                         <!-- Delete Button -->
-                        <form method="POST" action="{{ url_for('delete_listing', listing_id=listing.id) }}">
+                        <form method="POST" action="{{ url_for('delete_listing', listing_id=listing.id) }}" style="display:inline;">
                             <button type="submit" class="pure-button delete-button">Delete</button>
                         </form>
-                        
                     </td>
                 </tr>
                 {% else %}
