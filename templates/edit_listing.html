@@ -2,7 +2,7 @@
 {% block content %}
 <div class="page-content">
     <h1>Edit Study Session</h1>
-    <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('edit_listing', listing_id=listing.id) }}">
+    <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('edit_listing', listing_id=listing.id) }}" enctype="multipart/form-data">
         <fieldset>
             <div class="pure-control-group">
                 <label for="location">Location</label>

@@ -423,6 +423,7 @@ def view_listing(listing_id):
 def edit_listing(listing_id):
     listing = StudySession.query.get_or_404(listing_id)
 
+    # Ensure the user is logged in and owns the listing
     if 'user' not in session or listing.user_id != session['user']['id']:
         flash("You don't have permission to edit this listing.", "danger")
         return redirect(url_for('profile'))
@@ -435,6 +436,12 @@ def edit_listing(listing_id):
         listing.time = request.form['time']
         listing.num_students = request.form['num_students']
         listing.description = request.form['description']
+
+        # Check if a new picture was uploaded
+        if 'listing_picture' in request.files:
+            picture = request.files['listing_picture']
+            if picture and picture.filename != '':  # If there's a valid file
+                listing.listing_picture = picture.read()
 
         try:
             db.session.commit()
