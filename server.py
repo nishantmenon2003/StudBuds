@@ -260,7 +260,6 @@ def find_study_sessions():
     user_lon = request.args.get('user_lon', None)
 
     user = None
-
     try:
         if 'user' in session:
             user = User.query.filter_by(id=session['user']['id']).first()
@@ -313,7 +312,8 @@ def find_study_sessions():
                             'num_students': session.num_students,
                             'latitude': session.latitude,
                             'longitude': session.longitude,
-                            'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None
+                            'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None,
+                            'rsvpd': user in session.attendees if user else False  # Check if the user has RSVP'd
                         }
                         filtered_sessions.append(session_data)
     else:
@@ -328,7 +328,8 @@ def find_study_sessions():
                 'num_students': session.num_students,
                 'latitude': session.latitude,
                 'longitude': session.longitude,
-                'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None
+                'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None,
+                'rsvpd': user in session.attendees if user else False  # Check if the user has RSVP'd
             }
             filtered_sessions.append(session_data)
 

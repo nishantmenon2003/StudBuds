@@ -1,47 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='EditListingStyle.css') }}">
 <div class="page-content">
     <h1>Edit Study Session</h1>
-    <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('edit_listing', listing_id=listing.id) }}" enctype="multipart/form-data">
-        <fieldset>
-            <div class="pure-control-group">
-                <label for="location">Location</label>
-                <input id="location" name="location" type="text" value="{{ listing.location }}">
-            </div>
+    <div class="edit-container">
+        <!-- Form Section -->
+        <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('edit_listing', listing_id=listing.id) }}" enctype="multipart/form-data">
+            <fieldset>
+                <div class="pure-control-group">
+                    <label for="location">Location</label>
+                    <input id="location" name="location" type="text" value="{{ listing.location }}">
+                </div>
 
-            <div class="pure-control-group">
-                <label for="class_code">Class Code</label>
-                <input id="class_code" name="class_code" type="text" value="{{ listing.class_code }}">
-            </div>
+                <div class="pure-control-group">
+                    <label for="class_code">Class Code</label>
+                    <input id="class_code" name="class_code" type="text" value="{{ listing.class_code }}">
+                </div>
 
-            <div class="pure-control-group">
-                <label for="subject">Subject</label>
-                <input id="subject" name="subject" type="text" value="{{ listing.subject }}">
-            </div>
+                <div class="pure-control-group">
+                    <label for="subject">Subject</label>
+                    <input id="subject" name="subject" type="text" value="{{ listing.subject }}">
+                </div>
 
-            <div class="pure-control-group">
-                <label for="time">Time</label>
-                <input id="time" name="time" type="text" value="{{ listing.time }}">
-            </div>
+                <div class="pure-control-group">
+                    <label for="time">Time</label>
+                    <input id="time" name="time" type="text" value="{{ listing.time }}">
+                </div>
 
-            <div class="pure-control-group">
-                <label for="num_students">Number of Students</label>
-                <input id="num_students" name="num_students" type="text" value="{{ listing.num_students }}">
-            </div>
+                <div class="pure-control-group">
+                    <label for="num_students">Number of Students</label>
+                    <input id="num_students" name="num_students" type="text" value="{{ listing.num_students }}">
+                </div>
 
-            <div class="pure-control-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description">{{ listing.description }}</textarea>
-            </div>
+                <div class="pure-control-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description">{{ listing.description }}</textarea>
+                </div>
 
-            <div class="pure-control-group">
-                <label for="listing-picture">Attach Picture:</label>
-                <input id="listing-picture" name="listing_picture" type="file">
-            </div>
+                <div class="pure-control-group">
+                    <label for="listing-picture">Attach Picture:</label>
+                    <input id="listing-picture" name="listing_picture" type="file">
+                </div>
 
-            <!-- Submit button -->
-            <button type="submit" class="pure-button pure-button-primary">Save Changes</button>
-        </fieldset>
-    </form>
+                <!-- Submit button -->
+                <button type="submit" class="pure-button pure-button-primary">Save Changes</button>
+            </fieldset>
+        </form>
+
+        <!-- Current Picture Section -->
+        <div class="listing-picture-preview">
+            <h1>Current Picture</h1>
+            {% if listing.listing_picture %}
+                <img src="data:image/jpeg;base64,{{ listing.listing_picture | b64encode }}" alt="Current Listing Picture" style="max-width: 300px; max-height: 300px;">
+            {% else %}
+                <img src="{{ url_for('static', filename='default-building.png') }}" alt="No Picture Available" style="max-width: 300px; max-height: 300px;">
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

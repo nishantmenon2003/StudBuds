@@ -43,11 +43,14 @@
                         <p>{{ session.location }} | {{ session.class_code }}<br>
                         {{ session.subject }} | {{ session.time }}<br>
                         Looking for {{ session.num_students }} students...</p>
+                        {% if session.rsvpd %}
+                            <span class="rsvp-checkmark">✔ RSVP'd</span>
+                        {% endif %}
                     </a>
                     
-                    {% if user and user in session.attendees %}
-                        <span class="rsvp-checkmark">✔ RSVP'd</span>
-                    {% endif %}
+                    
+                        
+                    
                 </div>
             {% endfor %}
         {% else %}

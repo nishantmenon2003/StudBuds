@@ -78,14 +78,14 @@
                     <td>{{ listing.num_students }}</td>
                     <td>
                         <!-- View Button -->
-                        <a href="{{ url_for('view_listing', listing_id=listing.id) }}" class="pure-button view-button">View</a>
+                        <a href="{{ url_for('view_listing', listing_id=listing.id) }}" class="pure-button view-button">🔗</a>
                         
                         <!-- Edit Button -->
-                        <a href="{{ url_for('edit_listing', listing_id=listing.id) }}" class="pure-button edit-button">Edit</a>
+                        <a href="{{ url_for('edit_listing', listing_id=listing.id) }}" class="pure-button edit-button">✏️</a>
                         
                         <!-- Delete Button -->
                         <form method="POST" action="{{ url_for('delete_listing', listing_id=listing.id) }}" style="display:inline;">
-                            <button type="submit" class="pure-button delete-button">Delete</button>
+                            <button type="submit" class="pure-button delete-button">🗑️</button>
                         </form>
                     </td>
                 </tr>
