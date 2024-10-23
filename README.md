@@ -23,7 +23,7 @@ CSCI 5117, Fall 2024, [assignment description](https://canvas.umn.edu/courses/46
 * Created an RSVP feature where students that create an account can RSVP for listings and will display RSVP'd students Profile Pic and Name on the listing.
 * Used base64 to (BLOB) encode images so it can be stored in the database for profile pic and listing image use.
 * Creating Listings that students can edit, delete, * RSVP to that is available to anyone.
-* Mapping feature that shows the study sessions on a map for you to interact with and click on.
+* Mapping feature that shows the study sessions on a map for you to interact with and click on as well as filtering sessions by location.
 
 ## Testing Notes
 
