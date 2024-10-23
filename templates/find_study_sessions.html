@@ -36,7 +36,7 @@
                 <div class="pure-u-1 pure-u-md-1-2 session-item">
                     <a href="{{ url_for('view_listing', listing_id=session.id) }}">
                         {% if session.listing_picture %}
-                            <img src="data:image/jpeg;base64,{{ session.listing_picture | b64encode }}" alt="Study Session Picture" />
+                        <img src="data:image/jpeg;base64,{{ session.listing_picture }}" alt="Study Session Picture" />
                         {% else %}
                             <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="pure-img">
                         {% endif %}

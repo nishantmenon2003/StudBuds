@@ -312,7 +312,8 @@ def find_study_sessions():
                             'time': session.time,
                             'num_students': session.num_students,
                             'latitude': session.latitude,
-                            'longitude': session.longitude
+                            'longitude': session.longitude,
+                            'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None
                         }
                         filtered_sessions.append(session_data)
     else:
@@ -326,7 +327,8 @@ def find_study_sessions():
                 'time': session.time,
                 'num_students': session.num_students,
                 'latitude': session.latitude,
-                'longitude': session.longitude
+                'longitude': session.longitude,
+                'listing_picture': base64.b64encode(session.listing_picture).decode('utf-8') if session.listing_picture else None
             }
             filtered_sessions.append(session_data)
 
