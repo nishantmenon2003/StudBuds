@@ -24,6 +24,9 @@ load_dotenv()
 # Create the Flask app
 app = Flask(__name__)
 
+app = Flask(__name__, static_url_path='/static')
+
+
 # Set up Flask app configuration using environment variables
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
