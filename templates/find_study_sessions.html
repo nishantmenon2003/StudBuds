@@ -1,5 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Set the hidden form fields with the user's latitude and longitude
+                document.getElementById("user_lat").value = latitude;
+                document.getElementById("user_lon").value = longitude;
+
+                // Initialize the map
+                var map = L.map('map').setView([latitude, longitude], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Marker for user's current location
+                var userMarker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup('You are here!')
+                    .openPopup();
+
+                // Define study sessions as a JSON object passed from Jinja2
+                var studySessions = {{ study_sessions|tojson|safe }};
+
+                // Create bounds to zoom out to fit all markers
+                var bounds = new L.LatLngBounds();
+
+                // Loop over study sessions to add markers for each location
+                studySessions.forEach(function(session) {
+                    if (session.latitude && session.longitude) {
+                        // Add a marker for each session
+                        var sessionMarker = L.marker([session.latitude, session.longitude]).addTo(map)
+                            .bindPopup(`
+                                <strong>${session.location}</strong><br>
+                                ${session.class_code}<br>
+                                ${session.subject}<br>
+                                <a href="/view_listing/${session.id}" style="display:inline-block; padding:5px 10px; background-color:#4CAF50; color:white; border:none; border-radius:4px; text-decoration:none;">View</a>
+                            `);
+                        
+                        // Extend bounds to include each session marker's location
+                        bounds.extend(sessionMarker.getLatLng());
+                    }
+                });
+
+                // If there are session markers, zoom out to fit all markers in view
+                if (studySessions.length > 0) {
+                    map.fitBounds(bounds);
+                }
+
+            }, function(error) {
+                console.error("Error fetching geolocation: ", error);
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    });
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <div class="page-content">
     <h1>StudBuds Study Sessions</h1>
@@ -64,64 +123,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
 
-                // Set the hidden form fields with the user's latitude and longitude
-                document.getElementById("user_lat").value = latitude;
-                document.getElementById("user_lon").value = longitude;
-
-                // Initialize the map
-                var map = L.map('map').setView([latitude, longitude], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-
-                // Marker for user's current location
-                var userMarker = L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup('You are here!')
-                    .openPopup();
-
-                // Define study sessions as a JSON object passed from Jinja2
-                var studySessions = {{ study_sessions|tojson|safe }};
-
-                // Create bounds to zoom out to fit all markers
-                var bounds = new L.LatLngBounds();
-
-                // Loop over study sessions to add markers for each location
-                studySessions.forEach(function(session) {
-                    if (session.latitude && session.longitude) {
-                        // Add a marker for each session
-                        var sessionMarker = L.marker([session.latitude, session.longitude]).addTo(map)
-                            .bindPopup(`
-                                <strong>${session.location}</strong><br>
-                                ${session.class_code}<br>
-                                ${session.subject}<br>
-                                <a href="/view_listing/${session.id}" style="display:inline-block; padding:5px 10px; background-color:#4CAF50; color:white; border:none; border-radius:4px; text-decoration:none;">View</a>
-                            `);
-                        
-                        // Extend bounds to include each session marker's location
-                        bounds.extend(sessionMarker.getLatLng());
-                    }
-                });
-
-                // If there are session markers, zoom out to fit all markers in view
-                if (studySessions.length > 0) {
-                    map.fitBounds(bounds);
-                }
-
-            }, function(error) {
-                console.error("Error fetching geolocation: ", error);
-            });
-        } else {
-            console.error("Geolocation is not supported by this browser.");
-        }
-    });
-</script>
 
 {% endblock %}
