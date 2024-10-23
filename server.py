@@ -303,13 +303,36 @@ def find_study_sessions():
 
                     # If the session is within the specified radius, include it in the filtered list
                     if distance <= radius_km:
-                        filtered_sessions.append(session)
+                        # Convert the session object into a dictionary
+                        session_data = {
+                            'id': session.id,
+                            'location': session.location,
+                            'class_code': session.class_code,
+                            'subject': session.subject,
+                            'time': session.time,
+                            'num_students': session.num_students,
+                            'latitude': session.latitude,
+                            'longitude': session.longitude
+                        }
+                        filtered_sessions.append(session_data)
     else:
-        # If no user location is provided, show all sessions
-        filtered_sessions = study_sessions
+        # If no user location is provided, show all sessions (converted to dict)
+        for session in study_sessions:
+            session_data = {
+                'id': session.id,
+                'location': session.location,
+                'class_code': session.class_code,
+                'subject': session.subject,
+                'time': session.time,
+                'num_students': session.num_students,
+                'latitude': session.latitude,
+                'longitude': session.longitude
+            }
+            filtered_sessions.append(session_data)
 
     # Pass the filtered study sessions and user to the template
     return render_template('find_study_sessions.html', study_sessions=filtered_sessions, user=user, query=query)
+
 
 
 
