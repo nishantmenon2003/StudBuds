@@ -22,8 +22,8 @@
                     <label for="profile-picture">Profile Picture</label>
                     <input type="file" id="profile-picture" name="profile_picture">
                     <text for="profile-picture">Note: Press 'Update Profile' to update profile picture after uploading and give it a second.</text>
-                </br>
-                </br>
+                    </br>
+                    </br>
                 </div>
                 <fieldset>
                     <div class="pure-control-group">
@@ -35,17 +35,17 @@
                         <label for="email">Email</label>
                         <input id="email" name="email" type="text" value="{{ user.email }}">
                     </div>
-                </br>
+                    </br>
                     <div class="pure-control-group">
                         <label for="school">School</label>
                         <input id="school" name="school" type="text" value="{{ user.school }}">
                     </div>
-                </br>
+                    </br>
                     <div class="pure-control-group">
                         <label for="major">Major</label>
                         <input id="major" name="major" type="text" value="{{ user.major }}">
                     </div>
-                </br>
+                    </br>
                     <div class="pure-control-group">
                         <label for="bio">Bio</label>
                         <textarea id="bio" name="bio">{{ user.bio }}</textarea>
@@ -69,6 +69,7 @@
                     <th>Event</th>
                     <th>Time</th>
                     <th>Students</th>
+                    <th>Actions</th> <!-- New Actions column for delete -->
                 </tr>
             </thead>
             <tbody>
@@ -79,10 +80,17 @@
                     <td>{{ listing.subject }}</td>
                     <td>{{ listing.time }}</td>
                     <td>{{ listing.num_students }}</td>
+                    <td>
+                        <!-- Delete Button -->
+                        <form method="POST" action="{{ url_for('delete_listing', listing_id=listing.id) }}">
+                            <button type="submit" class="pure-button delete-button">Delete</button>
+                        </form>
+                        
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="5">No listings found.</td>
+                    <td colspan="6">No listings found.</td>
                 </tr>
                 {% endfor %}
             </tbody>

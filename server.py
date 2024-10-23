@@ -10,6 +10,10 @@ import requests
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 import base64
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm.exc import StaleDataError
+import psycopg2
+
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -56,9 +60,9 @@ class StudySession(db.Model):
     time = db.Column(db.String(50), nullable=False)
     num_students = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    listing_picture = db.Column(db.LargeBinary, nullable=True)  # Save the file path for the uploaded picture
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Link to the user who posted
-    attendees = db.relationship('User', secondary=attendees_table, backref='sessions')
+    listing_picture = db.Column(db.LargeBinary, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    attendees = db.relationship('User', secondary=attendees_table, backref='sessions', cascade='all, delete')
 
 @app.template_filter('b64encode')
 def b64encode_filter(data):
@@ -113,6 +117,31 @@ def profile():
     user_listings = StudySession.query.filter_by(user_id=user.id).all()
 
     return render_template('profile.html', user=user, listings=user_listings)
+
+@app.route('/delete_listing/<int:listing_id>', methods=['POST'])
+def delete_listing(listing_id):
+    session_item = StudySession.query.get_or_404(listing_id)
+    
+    print(f"Attempting to delete session: {session_item.subject}")
+
+    try:
+        # Remove attendees for this session by clearing the relationship
+        session_item.attendees.clear()
+        db.session.commit()
+
+        # Now you can safely delete the study session
+        db.session.delete(session_item)
+        db.session.commit()
+
+        flash('Study session deleted successfully!', 'success')
+        return redirect(url_for('find_study_sessions'))
+
+    except StaleDataError:
+        db.session.rollback()  # Rollback any changes if a StaleDataError occurs
+        flash('Error while deleting the study session. Please try again.', 'danger')
+        return redirect(url_for('find_study_sessions'))
+
+
 
 # Auth0 Callback route - handles the response from Auth0
 @app.route('/callback')
@@ -199,24 +228,21 @@ def logout():
 # Route to find study sessions with search functionality
 @app.route('/find_study_sessions', methods=['GET'])
 def find_study_sessions():
-    # Get the current user, if logged in
+    query = request.args.get('query', '')
     user = None
     if 'user' in session:
         user = User.query.filter_by(id=session['user']['id']).first()
-    
-    query = request.args.get('query', '')  # Get the search query from the request
-    filtered_sessions = []
 
-    # Query the database for study sessions
-    study_sessions = StudySession.query.all()
-
+    # Assuming you are querying the database for study sessions
     if query:
-        filtered_sessions = [session for session in study_sessions if query.lower() in session.class_code.lower() or query.lower() in session.subject.lower()]
+        study_sessions = StudySession.query.filter(
+            StudySession.class_code.contains(query) | 
+            StudySession.subject.contains(query)
+        ).all()
     else:
-        filtered_sessions = study_sessions  # Show all sessions if no query is provided
+        study_sessions = StudySession.query.all()
 
-    # Pass the user and the study sessions to the template
-    return render_template('find_study_sessions.html', study_sessions=filtered_sessions, user=user, query=query)
+    return render_template('find_study_sessions.html', study_sessions=study_sessions, user=user, query=query)
 
 # Modify /post_study_sessions to handle file upload and database insertions
 @app.route('/post_study_sessions', methods=['GET', 'POST'])
@@ -286,6 +312,5 @@ def view_listing(listing_id):
     already_rsvpd = user in session_item.attendees if user else False
 
     return render_template('view_listing.html', session_item=session_item, already_rsvpd=already_rsvpd)
-
 if __name__ == '__main__':
     app.run(debug=True)

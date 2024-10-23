@@ -13,7 +13,6 @@
                 <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="session-image">
             {% endif %}
 
-            <!-- Display session details -->
             <p><strong>Location:</strong> {{ session_item.location }}</p>
             <p><strong>Class Code:</strong> {{ session_item.class_code }}</p>
             <p><strong>Subject:</strong> {{ session_item.subject }}</p>
@@ -22,7 +21,6 @@
             <p><strong>Looking for:</strong> {{ session_item.num_students }} students</p>
         </div>
 
-        <!-- RSVP/Un-RSVP form -->
         <div class="rsvp-section">
         </br>
             <h2>RSVP for this Study Session</h2>
