@@ -1,42 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>StudBuds Study Sessions</h1>
+<div class="page-content">
+    <h1>StudBuds Study Sessions</h1>
 
-<div class="pure-g">
-    <div class="pure-u-1 search-bar">
-        <form class="pure-form" method="GET" action="{{ url_for('find_study_sessions') }}">
-            <input type="text" name="query" placeholder="Search for sessions..." class="pure-input-rounded" value="{{ query }}">
-            <button type="submit" class="pure-button pure-button-primary">🔍 Search</button>
-        </form>
+    <div class="pure-g">
+        <div class="pure-u-1 search-bar">
+            <form class="pure-form" method="GET" action="{{ url_for('find_study_sessions') }}">
+                <input type="text" name="query" placeholder="Search for sessions..." class="pure-input-rounded" value="{{ query }}">
+                <button type="submit" class="pure-button pure-button-primary">🔍 Search</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<div class="pure-g filter">
-    <div class="pure-u-1 pure-u-md-1-2">
-        <label>Location: <input type="text" placeholder="50 mi" class="pure-input-1"></label>
+    <div class="pure-g filter">
+        <div class="pure-u-1 pure-u-md-1-2">
+            <label>Location: <input type="text" placeholder="50 mi" class="pure-input-1"></label>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2">
+            <label>Major Only: <input type="text" placeholder="CompSci" class="pure-input-1"></label>
+        </div>
     </div>
-    <div class="pure-u-1 pure-u-md-1-2">
-        <label>Major Only: <input type="text" placeholder="CompSci" class="pure-input-1"></label>
-    </div>
-</div>
 
-<div class="pure-g session-list">
-    {% if study_sessions %}
-        {% for session in study_sessions %}
-            <div class="pure-u-1 pure-u-md-1-2 session-item">
-                {% if session.listing_picture %}
-                <img src="data:image/jpeg;base64,{{ session.listing_picture | b64encode }}" alt="Study Session Picture" />
-                {% else %}
-                    <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="pure-img">
-                {% endif %}
-                <p>{{ session.location }} | {{ session.class_code }}<br>
-                   {{ session.subject }} | {{ session.time }}<br>
-                   Looking for {{ session.num_students }} students...</p>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No study sessions found for "{{ query }}".</p>
-    {% endif %}
+    <div class="pure-g session-list">
+        {% if study_sessions %}
+            {% for session in study_sessions %}
+                <div class="pure-u-1 pure-u-md-1-2 session-item">
+                    <a href="{{ url_for('view_listing', listing_id=session.id) }}">
+                        {% if session.listing_picture %}
+                            <img src="data:image/jpeg;base64,{{ session.listing_picture | b64encode }}" alt="Study Session Picture" />
+                        {% else %}
+                            <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="pure-img">
+                        {% endif %}
+                        <p>{{ session.location }} | {{ session.class_code }}<br>
+                        {{ session.subject }} | {{ session.time }}<br>
+                        Looking for {{ session.num_students }} students...</p>
+                    </a>
+                    
+                    <!-- Show RSVP indication if the user has already RSVP'd -->
+                    {% if user and user in session.attendees %}
+                        <span class="rsvp-checkmark">✔ RSVP'd</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No study sessions found for "{{ query }}".</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 

@@ -1,0 +1,95 @@
+/* Session Item Styling */
+.session-details {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Session Image Styling */
+.session-details img {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Session Text Styling */
+.session-details p {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+}
+
+/* RSVP Button Styling */
+.rsvp-section form {
+    text-align: center;
+}
+
+.pure-button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-align: center;
+}
+
+/* Attendees Section Styling */
+.attendees-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.attendee {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+}
+
+.attendee img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* RSVP Button (Green) */
+.rsvp-button {
+    background-color: #4CAF50 !important;  /* Green for RSVP */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
+}
+
+/* Un-RSVP Button (Red) */
+.unrsvp-button {
+    background-color: #ff4d4d !important;  /* Red for Un-RSVP */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
+}
+
+/* Hover Effect for both RSVP and Un-RSVP */
+.rsvp-button:hover, .unrsvp-button:hover {
+    background-color: black !important;
+    color: white !important;
+    transform: scale(1.05); /* Apply scaling on hover */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
+}
+

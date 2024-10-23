@@ -246,3 +246,50 @@ form textarea {
     resize: vertical;
     height: 80px;
 }
+
+.rsvp-checkmark {
+    color: green;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+button.pure-button-update {
+    background: linear-gradient(90deg, #4A90E2, #9013FE);
+    color: #fff;
+    padding: 10px 15px;
+    width: 95%;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.5s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    cursor: pointer; /* Add cursor pointer to make it clear it's clickable */
+}
+
+button.pure-button-update:hover {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-color: black;
+}
+
+button.pure-button-update:active {
+    transform: translateY(4px); /* Make it move down slightly when clicked */
+}
+
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to the whole page content */
+.page-content {
+    animation: fadeInDown 0.8s ease-in-out;  /* Animation duration and easing */
+}

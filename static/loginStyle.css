@@ -200,3 +200,19 @@ body, html {
 .login-link a:hover {
     text-decoration: underline;
 }
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to the whole page content */
+.page-content {
+    animation: fadeInDown 0.8s ease-in-out;  /* Animation duration and easing */
+}

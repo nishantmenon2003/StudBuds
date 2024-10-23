@@ -42,7 +42,10 @@ class User(db.Model):
     bio = db.Column(db.Text, nullable=True)
     profile_picture = db.Column(db.LargeBinary, nullable=True)
     
-
+attendees_table = db.Table('attendees',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('session_id', db.Integer, db.ForeignKey('study_session.id'))
+)
 
 class StudySession(db.Model):
     __tablename__ = 'study_session'
@@ -55,6 +58,7 @@ class StudySession(db.Model):
     description = db.Column(db.Text, nullable=True)
     listing_picture = db.Column(db.LargeBinary, nullable=True)  # Save the file path for the uploaded picture
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Link to the user who posted
+    attendees = db.relationship('User', secondary=attendees_table, backref='sessions')
 
 @app.template_filter('b64encode')
 def b64encode_filter(data):
@@ -65,9 +69,7 @@ def b64encode_filter(data):
 # Home route - displays the login and registration forms
 @app.route('/')
 def home():
-    if 'user' not in session:  # Check if user is not in the session
-        return redirect(url_for('login'))  # Redirect to the login page
-    return redirect(url_for('login'))  # Redirect to find study sessions if logged in
+    return redirect(url_for('find_study_sessions'))
 
 # Auth0 Login route - redirects to Auth0 login page
 @app.route('/auth0-login')
@@ -81,12 +83,6 @@ def auth0_login():
         "scope": "openid profile email"
     }
     return redirect(f"{auth0_url}?{urlencode(params)}")
-
-@app.route('/view_listing/<int:listing_id>')
-def view_listing(listing_id):
-    listing = StudySession.query.get_or_404(listing_id)
-    return render_template('view_listing.html', listing=listing)
-
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -203,10 +199,11 @@ def logout():
 # Route to find study sessions with search functionality
 @app.route('/find_study_sessions', methods=['GET'])
 def find_study_sessions():
-    if 'user' not in session:
-        flash('Please log in to access this page.', 'warning')
-        return redirect(url_for('login'))
-
+    # Get the current user, if logged in
+    user = None
+    if 'user' in session:
+        user = User.query.filter_by(id=session['user']['id']).first()
+    
     query = request.args.get('query', '')  # Get the search query from the request
     filtered_sessions = []
 
@@ -218,7 +215,8 @@ def find_study_sessions():
     else:
         filtered_sessions = study_sessions  # Show all sessions if no query is provided
 
-    return render_template('find_study_sessions.html', study_sessions=filtered_sessions, query=query)
+    # Pass the user and the study sessions to the template
+    return render_template('find_study_sessions.html', study_sessions=filtered_sessions, user=user, query=query)
 
 # Modify /post_study_sessions to handle file upload and database insertions
 @app.route('/post_study_sessions', methods=['GET', 'POST'])
@@ -260,6 +258,34 @@ def post_study_sessions():
         return redirect(url_for('find_study_sessions'))
 
     return render_template('post_study_sessions.html')
+
+@app.route('/view_listing/<int:listing_id>', methods=['GET', 'POST'])
+def view_listing(listing_id):
+    session_item = StudySession.query.get_or_404(listing_id)
+    
+    user = None
+    if 'user' in session:
+        user = User.query.filter_by(id=session['user']['id']).first()
+
+    if request.method == 'POST':
+        if not user:
+            flash('Please log in to RSVP for this session.', 'warning')
+            return redirect(url_for('login'))
+        
+
+        if user in session_item.attendees:
+            session_item.attendees.remove(user) 
+            db.session.commit()
+            flash('You have successfully un-RSVP\'d.', 'success')
+        else:
+            session_item.attendees.append(user)
+            db.session.commit()
+            flash('RSVP successful!', 'success')
+
+        return redirect(url_for('view_listing', listing_id=listing_id))
+    already_rsvpd = user in session_item.attendees if user else False
+
+    return render_template('view_listing.html', session_item=session_item, already_rsvpd=already_rsvpd)
 
 if __name__ == '__main__':
     app.run(debug=True)

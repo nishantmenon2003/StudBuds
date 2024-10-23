@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='viewListingStyle.css') }}">
+<div class="page-content">
+    <h1>{{ session_item.subject }} Study Session</h1>
+
+    <div class="session-details">
+        <div class="session-info">
+            <!-- Display the session image -->
+            {% if session_item.listing_picture %}
+                <img src="data:image/jpeg;base64,{{ session_item.listing_picture | b64encode }}" alt="Session Image" class="session-image">
+            {% else %}
+                <img src="{{ url_for('static', filename='default-building.png') }}" alt="Default Session Image" class="session-image">
+            {% endif %}
+
+            <!-- Display session details -->
+            <p><strong>Location:</strong> {{ session_item.location }}</p>
+            <p><strong>Class Code:</strong> {{ session_item.class_code }}</p>
+            <p><strong>Subject:</strong> {{ session_item.subject }}</p>
+            <p><strong>Time:</strong> {{ session_item.time }}</p>
+            <p><strong>Description:</strong> {{ session_item.description }}</p>
+            <p><strong>Looking for:</strong> {{ session_item.num_students }} students</p>
+        </div>
+
+        <!-- RSVP/Un-RSVP form -->
+        <div class="rsvp-section">
+        </br>
+            <h2>RSVP for this Study Session</h2>
+            <form method="POST" action="{{ url_for('view_listing', listing_id=session_item.id) }}">
+                <button type="submit" class="pure-button {% if already_rsvpd %}unrsvp-button{% else %}rsvp-button{% endif %}">
+                    {% if already_rsvpd %}
+                        Un-RSVP
+                    {% else %}
+                        RSVP
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+
+        <!-- Current Attendees Section -->
+        <div class="attendees-section">
+            <h2>Current Attendees</h2>
+            </br>
+            <div class="attendees-list">
+                {% if session_item.attendees %}
+                    {% for attendee in session_item.attendees %}
+                        <div class="attendee">
+                            {% if attendee.profile_picture %}
+                                <img src="data:image/jpeg;base64,{{ attendee.profile_picture | b64encode }}" alt="Attendee Profile Picture" class="attendee-image">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='guest.png') }}" alt="Default Profile Picture" class="attendee-image">
+                            {% endif %}
+                            <p>{{ attendee.name }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No attendees yet. Be the first to RSVP!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

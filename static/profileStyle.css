@@ -28,22 +28,6 @@
     transition: background-color 0.3s ease;
 }
 
-/* Animation for smooth appearance */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.profile-container,
-.pure-table {
-    animation: fadeIn 0.6s ease-in-out;
-}
 
 /* Profile Picture Container */
 .profile-picture-container {
@@ -106,7 +90,6 @@
     align-items: center;
     width: 100%;
     margin-bottom: 20px;
-    margin-left: 140px;
 }
 
 .profile-picture-container img {
@@ -153,4 +136,30 @@ button.pure-button-update:hover {
 
 button.pure-button-update:active {
     transform: translateY(4px); /* Make it move down slightly when clicked */
+}
+
+/* Center Form Labels and Inputs */
+.pure-control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Ensure Inputs and Textareas are also centered */
+.pure-control-group input[type="text"],
+.pure-control-group textarea,
+.pure-control-group input[type="file"] {
+    width: 100%; /* Make sure inputs fill the width of the container */
+    max-width: 400px; /* Set a maximum width for better responsiveness */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left; /* Keep text aligned to the left inside the input */
+}
+
+/* Align the Submit Button */
+.pure-button {
+    margin-top: 20px;
 }

@@ -1,89 +1,92 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Profile</h1>
-<div class="profile-container pure-g">
-    <div class="pure-u-1 profile-picture-container">
+<link rel="stylesheet" href="{{ url_for('static', filename='profileStyle.css') }}">
+<div class="page-content">
+    <h1>Profile</h1>
+    <div class="profile-container pure-g">
         <div class="pure-u-1 profile-picture-container">
-            <!-- Check if the user has a profile picture -->
-            {% if user.profile_picture %}
-                <!-- If a profile picture exists, display it -->
-                <img src="data:image/jpeg;base64,{{ user.profile_picture | b64encode }}" alt="Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
-            {% else %}
-                <!-- If no profile picture, show a default placeholder -->
-                <img src="{{ url_for('static', filename='guest.png') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
-            {% endif %}
+            <div class="pure-u-1 profile-picture-container">
+                <!-- Check if the user has a profile picture -->
+                {% if user.profile_picture %}
+                    <!-- If a profile picture exists, display it -->
+                    <img src="data:image/jpeg;base64,{{ user.profile_picture | b64encode }}" alt="Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
+                {% else %}
+                    <!-- If no profile picture, show a default placeholder -->
+                    <img src="{{ url_for('static', filename='guest.png') }}" alt="Default Profile Picture" class="pure-img profile-picture" style="max-width: 200px; border-radius: 50%;">
+                {% endif %}
+            </div>
+        </div>
+        <div class="pure-u-1 profile-form-container">
+            <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+                <div class="pure-control-group">
+                    <label for="profile-picture">Profile Picture</label>
+                    <input type="file" id="profile-picture" name="profile_picture">
+                    <text for="profile-picture">Note: Press 'Update Profile' to update profile picture after uploading and give it a second.</text>
+                </br>
+                </br>
+                </div>
+                <fieldset>
+                    <div class="pure-control-group">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text" value="{{ user.name }}">
+                    </div>
+            
+                    <div class="pure-control-group">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="text" value="{{ user.email }}">
+                    </div>
+                </br>
+                    <div class="pure-control-group">
+                        <label for="school">School</label>
+                        <input id="school" name="school" type="text" value="{{ user.school }}">
+                    </div>
+                </br>
+                    <div class="pure-control-group">
+                        <label for="major">Major</label>
+                        <input id="major" name="major" type="text" value="{{ user.major }}">
+                    </div>
+                </br>
+                    <div class="pure-control-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+                    </div>
+                    </br>
+                    <!-- Add submit button -->
+                    <button type="submit" class="pure-button pure-button-update">Update Profile</button>
+                </fieldset>
+            </form>
         </div>
     </div>
-    <div class="pure-u-1 profile-form-container">
-        <form class="pure-form pure-form-stacked" method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
-            <div class="pure-control-group">
-                <label for="profile-picture">Profile Picture:</label>
-                <input type="file" id="profile-picture" name="profile_picture">
-                <text for="profile-picture">Note: Press 'Update Profile' to update profile picture after uploading and give it a second.</text>
-            </br>
-            </br>
-            </div>
-            <fieldset>
-                <div class="pure-control-group">
-                    <label for="name">Name:</label>
-                    <input id="name" name="name" type="text" value="{{ user.name }}">
-                </div>
-        
-                <div class="pure-control-group">
-                    <label for="email">Email:</label>
-                    <input id="email" name="email" type="text" value="{{ user.email }}">
-                </div>
-        
-                <div class="pure-control-group">
-                    <label for="school">School:</label>
-                    <input id="school" name="school" type="text" value="{{ user.school }}">
-                </div>
-        
-                <div class="pure-control-group">
-                    <label for="major">Major:</label>
-                    <input id="major" name="major" type="text" value="{{ user.major }}">
-                </div>
-        
-                <div class="pure-control-group">
-                    <label for="bio">Bio:</label>
-                    <textarea id="bio" name="bio">{{ user.bio }}</textarea>
-                </div>
-                </br>
-                <!-- Add submit button -->
-                <button type="submit" class="pure-button pure-button-update">Update Profile</button>
-            </fieldset>
-        </form>
-    </div>
-</div>
 
-<!-- Display User Listings -->
-<div class="extra-info pure-u-1">
-    <h2>My Listings</h2>
-    <table class="pure-table pure-table-horizontal">
-        <thead>
-            <tr>
-                <th>Location</th>
-                <th>Course</th>
-                <th>Event</th>
-                <th>Time</th>
-                <th>Students</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for listing in listings %}
-            <tr>
-                <td>{{ listing.location }}</td>
-                <td>{{ listing.class_code }}</td>
-                <td>{{ listing.subject }}</td>
-                <td>{{ listing.time }}</td>
-                <td>{{ listing.num_students }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="5">No listings found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Display User Listings -->
+    <div class="extra-info pure-u-1">
+        <h2>My Listings</h2>
+        <table class="pure-table pure-table-horizontal">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Course</th>
+                    <th>Event</th>
+                    <th>Time</th>
+                    <th>Students</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for listing in listings %}
+                <tr>
+                    <td>{{ listing.location }}</td>
+                    <td>{{ listing.class_code }}</td>
+                    <td>{{ listing.subject }}</td>
+                    <td>{{ listing.time }}</td>
+                    <td>{{ listing.num_students }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No listings found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
