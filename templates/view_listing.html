@@ -6,7 +6,7 @@
 
     <div class="session-details">
         <div class="session-info">
-            <!-- Display the session image -->
+            <!-- ddisplay the session image -->
             {% if session_item.listing_picture %}
                 <img src="data:image/jpeg;base64,{{ session_item.listing_picture | b64encode }}" alt="Session Image" class="session-image">
             {% else %}
@@ -35,7 +35,6 @@
             </form>
         </div>
 
-        <!-- Current Attendees Section -->
         <div class="attendees-section">
             <h2>Current Attendees</h2>
             </br>
