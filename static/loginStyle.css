@@ -1,4 +1,4 @@
-/* Login page styling */
+
 body, html {
     margin: 0;
     padding: 0;
@@ -35,17 +35,17 @@ body, html {
     }
 }
 
-/* Login box styling */
+
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    z-index: 1; /* Ensures that the login form is above the background */
+    z-index: 1; 
 }
 
 .login-box {
-    background: rgba(0, 0, 0, 0.8); /* Use a semi-transparent black background for the login form */
+    background: rgba(0, 0, 0, 0.8); 
     color: #fff;
     padding: 40px;
     border-radius: 10px;
@@ -103,14 +103,12 @@ body, html {
 
 .pure-button-primary:hover {
     background-color: rgb(56, 56, 255);
-    /* color: black; */
     transform: scale(1.05);
     border-color: black;
 }
 
 .pure-button-primary:hover {
     background-color: rgb(56, 56, 255);
-    /* color: black; */
     transform: scale(1.05);
     border-color: black;
 }
@@ -147,18 +145,16 @@ body, html {
 }
 
 
-/* REGISTER PAGE
-/* Register page styling similar to the login page */
 .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    z-index: 1; /* Ensures that the register form is above the background */
+    z-index: 1;
 }
 
 .register-box {
-    background: rgba(0, 0, 0, 0.8); /* Use a semi-transparent background for the register form */
+    background: rgba(0, 0, 0, 0.8);
     color: #fff;
     padding: 40px;
     border-radius: 10px;
@@ -212,7 +208,7 @@ body, html {
     }
 }
 
-/* Apply animation to the whole page content */
+
 .page-content {
-    animation: fadeInDown 0.8s ease-in-out;  /* Animation duration and easing */
+    animation: fadeInDown 0.8s ease-in-out;
 }

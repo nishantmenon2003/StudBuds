@@ -1,4 +1,4 @@
-/* Table styling */
+
 .pure-table {
     width: 100%;
     margin-top: 30px;
@@ -29,27 +29,27 @@
 }
 
 
-/* Profile Picture Container */
+
 .profile-picture-container {
     display: flex;
-    justify-content: center; /* Center the image horizontally */
-    align-items: center;     /* Center the image vertically */
+    justify-content: center;
+    align-items: center;
     margin-bottom: 20px;
-    width: 100%; /* Ensure full width to center the content */
+    width: 100%;
 }
 
-/* Profile Picture */
+
 .profile-picture {
     width: 200px;
-    height: 200px; /* Ensure height and width are the same for a circle */
-    border-radius: 50%; /* Make it circular */
-    object-fit: cover; /* Ensures the image scales to cover the entire container without distortion */
-    border: 5px solid #ffffff; /* Optional: add a white border */
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover; 
+    border: 5px solid #ffffff;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-picture:hover {
-    transform: scale(1.1); /* Add hover effect for scaling */
+    transform: scale(1.1); 
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -109,12 +109,10 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
-    text-align: center; /* Ensures form is centered */
+    text-align: center; 
 }
 
 
-/* Update Button */
-/* Update Profile button styled like sidebar buttons */
 button.pure-button-update {
     background: linear-gradient(90deg, #4A90E2, #9013FE);
     color: #fff;
@@ -123,7 +121,7 @@ button.pure-button-update {
     text-align: center;
     border-radius: 8px;
     transition: background-color 0.5s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-    cursor: pointer; /* Add cursor pointer to make it clear it's clickable */
+    cursor: pointer; 
 }
 
 button.pure-button-update:hover {
@@ -135,10 +133,10 @@ button.pure-button-update:hover {
 }
 
 button.pure-button-update:active {
-    transform: translateY(4px); /* Make it move down slightly when clicked */
+    transform: translateY(4px); 
 }
 
-/* Center Form Labels and Inputs */
+
 .pure-control-group {
     display: flex;
     flex-direction: column;
@@ -146,21 +144,21 @@ button.pure-button-update:active {
     width: 100%;
 }
 
-/* Ensure Inputs and Textareas are also centered */
+
 .pure-control-group input[type="text"],
 .pure-control-group textarea,
 .pure-control-group input[type="file"] {
-    width: 100%; /* Make sure inputs fill the width of the container */
-    max-width: 400px; /* Set a maximum width for better responsiveness */
+    width: 100%;
+    max-width: 400px; 
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    text-align: left; /* Keep text aligned to the left inside the input */
+    text-align: left; 
 }
 
 .edit-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     border: none;
     color: white;
     padding: 8px 16px;
@@ -177,7 +175,6 @@ button.pure-button-update:active {
     background-color: #45a049;
 }
 
-/* Align the Submit Button */
 .pure-button {
     margin-top: 20px;
 }

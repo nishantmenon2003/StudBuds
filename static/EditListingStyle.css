@@ -6,24 +6,23 @@
     margin-left: 20px;
 }
 
-/* Style for delete button */
 .delete-button {
-    background-color: #ff4d4d;  /* Red background to indicate delete action */
-    color: white;               /* White text/icon color */
-    border: none;               /* Remove any default border */
-    padding: 10px 20px;         /* Add some padding for a clickable area */
-    font-size: 16px;            /* Increase the font size for better visibility */
-    border-radius: 5px;         /* Add rounded corners */
-    cursor: pointer;            /* Change cursor to pointer on hover */
-    transition: background-color 0.3s ease;  /* Smooth transition on hover */
+    background-color: #ff4d4d;
+    color: white;         
+    border: none;           
+    padding: 10px 20px;   
+    font-size: 16px;         
+    border-radius: 5px;      
+    cursor: pointer;   
+    transition: background-color 0.3s ease; 
 }
 
 .delete-button:hover {
-    background-color: #cc0000;  /* Darker red on hover */
+    background-color: #cc0000; 
 }
 
-/* Optional: You can add some additional hover effects */
+
 .delete-button:active {
-    background-color: #a30000;  /* Even darker red on active (click) state */
-    transform: scale(0.98);     /* Slightly shrink button on click for feedback */
+    background-color: #a30000; 
+    transform: scale(0.98);
 }

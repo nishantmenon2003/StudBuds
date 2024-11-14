@@ -1,4 +1,4 @@
-/* Session Item Styling */
+
 .session-details {
     text-align: center;
     display: flex;
@@ -12,7 +12,7 @@
     margin-bottom: 20px;
 }
 
-/* Session Image Styling */
+
 .session-details img {
     width: 100%;
     max-width: 500px;
@@ -22,7 +22,7 @@
     margin-bottom: 15px;
 }
 
-/* Session Text Styling */
+
 .session-details p {
     font-size: 18px;
     color: #333;
@@ -30,7 +30,7 @@
     text-align: center;
 }
 
-/* RSVP Button Styling */
+
 .rsvp-section form {
     text-align: center;
 }
@@ -42,7 +42,7 @@
     text-align: center;
 }
 
-/* Attendees Section Styling */
+
 .attendees-section {
     text-align: center;
     margin-top: 20px;
@@ -61,9 +61,9 @@
     object-fit: cover;
 }
 
-/* RSVP Button (Green) */
+
 .rsvp-button {
-    background-color: #4CAF50 !important;  /* Green for RSVP */
+    background-color: #4CAF50 !important;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
@@ -73,9 +73,9 @@
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
 }
 
-/* Un-RSVP Button (Red) */
+
 .unrsvp-button {
-    background-color: #ff4d4d !important;  /* Red for Un-RSVP */
+    background-color: #ff4d4d !important;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
@@ -85,11 +85,11 @@
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
 }
 
-/* Hover Effect for both RSVP and Un-RSVP */
+
 .rsvp-button:hover, .unrsvp-button:hover {
     background-color: black !important;
     color: white !important;
-    transform: scale(1.05); /* Apply scaling on hover */
+    transform: scale(1.05); 
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out;
 }
 
