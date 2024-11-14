@@ -18,16 +18,13 @@ from sqlalchemy.orm.exc import StaleDataError
 import psycopg2
 
 
-# Load environment variables from the .env file
 load_dotenv()
 
-# Create the Flask app
 app = Flask(__name__)
 
 app = Flask(__name__, static_url_path='/static')
 
 
-# Set up Flask app configuration using environment variables
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -37,13 +34,11 @@ app.config['SESSION_USE_SIGNER'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 Session(app)
 
-# Initialize the database and Bcrypt
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 migrate = Migrate(app, db)
 
-# User model for storing user information in the database
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -81,12 +76,10 @@ def b64encode_filter(data):
         return ''
     return base64.b64encode(data).decode('utf-8')
 
-# Home route - displays the login and registration forms
 @app.route('/')
 def home():
     return redirect(url_for('find_study_sessions'))
 
-# Auth0 Login route - redirects to Auth0 login page
 @app.route('/auth0-login')
 def auth0_login():
     auth0_url = f"https://{os.getenv('AUTH0_DOMAIN')}/authorize"
@@ -113,7 +106,7 @@ def profile():
         user.school = request.form['school']
         user.major = request.form['major']
         user.bio = request.form['bio']
-        # Handle profile picture upload
+
         if 'profile_picture' in request.files:
             picture = request.files['profile_picture']
             if picture:
@@ -124,9 +117,7 @@ def profile():
         session['user']['name'] = user.name
         flash('Profile updated successfully.', 'success')
 
-    # Fetch user's listings
     user_listings = StudySession.query.filter_by(user_id=user.id).all()
-
     return render_template('profile.html', user=user, listings=user_listings)
 
 @app.route('/delete_listing/<int:listing_id>', methods=['POST'])
@@ -136,11 +127,9 @@ def delete_listing(listing_id):
     print(f"Attempting to delete session: {session_item.subject}")
 
     try:
-        # Remove attendees for this session by clearing the relationship
         session_item.attendees.clear()
         db.session.commit()
 
-        # Now you can safely delete the study session
         db.session.delete(session_item)
         db.session.commit()
 
@@ -153,8 +142,6 @@ def delete_listing(listing_id):
         return redirect(url_for('find_study_sessions'))
 
 
-
-# Auth0 Callback route - handles the response from Auth0
 @app.route('/callback')
 def callback_handling():
     code = request.args.get('code')
@@ -177,7 +164,6 @@ def callback_handling():
     session['user'] = user_info
     return redirect(url_for('dashboard'))
 
-# Dashboard route - displays a welcome message for the logged-in user
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
@@ -185,7 +171,6 @@ def dashboard():
         return redirect(url_for('auth0_login'))
     return render_template('base.html', user=session['user'])
 
-# Registration route - allows users to create an account
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -208,7 +193,6 @@ def register():
 
     return render_template('register.html')
 
-# Login route - allows users to log in to their account
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -230,15 +214,13 @@ def login():
 
     return render_template('login.html')
 
-# Logout route - logs the user out and redirects to the home page
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('home'))
 
 def calculate_distance(lat1, lon1, lat2, lon2):
-    # Haversine formula to calculate the distance between two lat/lon points
-    R = 6371.0  # Radius of Earth in kilometers
+    R = 6371.0  
 
     lat1_rad = radians(lat1)
     lon1_rad = radians(lon1)
@@ -251,14 +233,12 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     a = sin(dlat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlon / 2)**2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-    distance = R * c  # Distance in kilometers
-    return distance
+    distance = R * c  
 
-# Route to find study sessions with search functionality
 @app.route('/find_study_sessions', methods=['GET'])
 def find_study_sessions():
     query = request.args.get('query', '')
-    radius = request.args.get('radius', '50')  # Default radius to 50 if not provided
+    radius = request.args.get('radius', '50')  
     user_lat = request.args.get('user_lat', None)
     user_lon = request.args.get('user_lon', None)
 
@@ -269,13 +249,11 @@ def find_study_sessions():
     except Exception as e:
         print(f"Error accessing session: {e}")
     
-    # Validate and convert radius to float
     try:
-        radius_km = float(radius) * 1.60934  # Convert miles to kilometers
+        radius_km = float(radius) * 1.60934  
     except ValueError:
-        radius_km = 50 * 1.60934  # If conversion fails, default to 50 miles in km
+        radius_km = 50 * 1.60934  
 
-    # Fetch all study sessions or filter by query
     if query:
         study_sessions = StudySession.query.filter(
             StudySession.class_code.contains(query) | 
@@ -298,14 +276,10 @@ def find_study_sessions():
                 session_lat = session.latitude
                 session_lon = session.longitude
 
-                # Check if session latitude and longitude are valid numbers
                 if session_lat is not None and session_lon is not None:
-                    # Calculate the distance between the user and the session
                     distance = calculate_distance(user_lat, user_lon, session_lat, session_lon)
 
-                    # If the session is within the specified radius, include it in the filtered list
                     if distance <= radius_km:
-                        # Convert the session object into a dictionary
                         session_data = {
                             'id': session.id,
                             'location': session.location,
@@ -320,7 +294,6 @@ def find_study_sessions():
                         }
                         filtered_sessions.append(session_data)
     else:
-        # If no user location is provided, show all sessions (converted to dict)
         for session in study_sessions:
             session_data = {
                 'id': session.id,
@@ -336,7 +309,6 @@ def find_study_sessions():
             }
             filtered_sessions.append(session_data)
 
-    # Pass the filtered study sessions and user to the template
     return render_template('find_study_sessions.html', study_sessions=filtered_sessions, user=user, query=query)
 
 
@@ -345,9 +317,6 @@ def find_study_sessions():
 
 
 
-
-
-# Modify /post_study_sessions to handle file upload and database insertions
 @app.route('/post_study_sessions', methods=['GET', 'POST'])
 def post_study_sessions():
     if 'user' not in session:
@@ -362,7 +331,6 @@ def post_study_sessions():
         num_students = request.form['num-students']
         description = request.form['description']
         
-        # Get the latitude and longitude from the form
         latitude = request.form['latitude']
         longitude = request.form['longitude']
 
@@ -381,7 +349,7 @@ def post_study_sessions():
             description=description,
             listing_picture=listing_picture,
             latitude=latitude,
-            longitude=longitude,  # Make sure these values are passed
+            longitude=longitude,  
             user_id=session['user']['id']
         )
 
@@ -427,13 +395,11 @@ def view_listing(listing_id):
 def edit_listing(listing_id):
     listing = StudySession.query.get_or_404(listing_id)
 
-    # Ensure the user is logged in and owns the listing
     if 'user' not in session or listing.user_id != session['user']['id']:
         flash("You don't have permission to edit this listing.", "danger")
         return redirect(url_for('profile'))
 
     if request.method == 'POST':
-        # Update the listing with form data
         listing.location = request.form['location']
         listing.class_code = request.form['class_code']
         listing.subject = request.form['subject']
@@ -441,10 +407,9 @@ def edit_listing(listing_id):
         listing.num_students = request.form['num_students']
         listing.description = request.form['description']
 
-        # Check if a new picture was uploaded
         if 'listing_picture' in request.files:
             picture = request.files['listing_picture']
-            if picture and picture.filename != '':  # If there's a valid file
+            if picture and picture.filename != '':  
                 listing.listing_picture = picture.read()
 
         try:
