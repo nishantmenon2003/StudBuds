@@ -100,7 +100,7 @@ def profile():
     user = User.query.filter_by(id=session['user']['id']).first()
 
     if request.method == 'POST':
-        # Get data from the form and update the user's profile
+
         user.name = request.form['name']
         user.email = request.form['email']
         user.school = request.form['school']
@@ -137,7 +137,7 @@ def delete_listing(listing_id):
         return redirect(url_for('find_study_sessions'))
 
     except StaleDataError:
-        db.session.rollback()  # Rollback any changes if a StaleDataError occurs
+        db.session.rollback()  
         flash('Error while deleting the study session. Please try again.', 'danger')
         return redirect(url_for('find_study_sessions'))
 
