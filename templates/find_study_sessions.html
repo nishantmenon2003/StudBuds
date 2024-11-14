@@ -7,32 +7,26 @@
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
-                // Set the hidden form fields with the user's latitude and longitude
                 document.getElementById("user_lat").value = latitude;
                 document.getElementById("user_lon").value = longitude;
 
-                // Initialize the map
+                // inistialize the map
                 var map = L.map('map').setView([latitude, longitude], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
 
-                // Marker for user's current location
                 var userMarker = L.marker([latitude, longitude]).addTo(map)
                     .bindPopup('You are here!')
                     .openPopup();
 
-                // Define study sessions as a JSON object passed from Jinja2
                 var studySessions = {{ study_sessions|tojson|safe }};
 
-                // Create bounds to zoom out to fit all markers
                 var bounds = new L.LatLngBounds();
 
-                // Loop over study sessions to add markers for each location
                 studySessions.forEach(function(session) {
                     if (session.latitude && session.longitude) {
-                        // Add a marker for each session
                         var sessionMarker = L.marker([session.latitude, session.longitude]).addTo(map)
                             .bindPopup(`
                                 <strong>${session.location}</strong><br>
@@ -41,12 +35,10 @@
                                 <a href="/view_listing/${session.id}" style="display:inline-block; padding:5px 10px; background-color:#4CAF50; color:white; border:none; border-radius:4px; text-decoration:none;">View</a>
                             `);
                         
-                        // Extend bounds to include each session marker's location
                         bounds.extend(sessionMarker.getLatLng());
                     }
                 });
 
-                // If there are session markers, zoom out to fit all markers in view
                 if (studySessions.length > 0) {
                     map.fitBounds(bounds);
                 }
@@ -70,7 +62,6 @@
                 <label for="radius">Radius (miles):</label>
                 <input id="radiusInput" type="number" name="radius" placeholder="50 mi" class="pure-input-rounded" value="{{ radius }}">
                 
-                <!-- Hidden fields to capture user's latitude and longitude -->
                 <input type="hidden" id="user_lat" name="user_lat">
                 <input type="hidden" id="user_lon" name="user_lon">
 
@@ -79,15 +70,8 @@
         </div>
     </div>
 
-    <!-- Map container -->
+    <!-- map container thing -->
     <div id="map" style="height: 400px; margin-top: 20px;"></div>
-
-    <!-- Filter options -->
-    <div class="pure-g filter">
-        <div class="pure-u-1 pure-u-md-1-2">
-            <label>Major Only: <input type="text" placeholder="CompSci" class="pure-input-1"></label>
-        </div>
-    </div>
 
     <div class="pure-g session-list">
         {% if study_sessions %}
