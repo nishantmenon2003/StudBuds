@@ -1,12 +1,11 @@
 ## App Info:
 
 * App Name: StudBuds
-* App Link: <https://project-1-wallahi-wonders.onrender.com>
 
-### Students
+### Developers
 
 * Mohamed Mourad
-* Nishant Menon, menon098@umn.edu
+* Nishant Menon - nishantsmenon@gmail.com
 * Yousef Barakat
 
 
@@ -43,7 +42,6 @@ Individual Listing Page for RSVP'ing that displays RSVP'd students at the bottom
 
 ## External Dependencies
 
-* Library or service name: description of use
 * base64: To read images as binary to store in the PSQL database. This is so we can have users upload profile and listing images to the website to be stored.
 
 ...
